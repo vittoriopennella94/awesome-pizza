@@ -14,7 +14,7 @@
             <column name="customer_address" type="varchar(255)"/>
             <column name="customer_street_number" type="varchar(255)"/>
             <column name="customer_add_info" type="varchar(255)"/>
-            <column name="order_state" type="varchar(255)"/>
+            <column name="order_state" type="bigint"/>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
             <column name="update_datetime" type="timestamp"/>
         </createTable>
@@ -37,7 +37,7 @@
             </column>
             <column name="product_name" type="varchar(255)"/>
             <column name="product_description" type="varchar(255)"/>
-            <column name="product_price" type="decimal"/>
+            <column name="product_price" type="decimal(10,2)"/>
             <column name="product_enable" type="nchar(1)">
                 <constraints nullable="false" checkConstraint="product_enable in ('Y', 'N')"/>
             </column>
@@ -55,11 +55,11 @@
         </createTable>
 
 
-        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="order_id" constraintName="fk_order__id"
+        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="order_id" constraintName="fk_order_id"
                                  referencedTableName="tbl_order"
                                  referencedColumnNames="order_id"/>
 
-        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="order_product_id" constraintName="fk_product_id"
+        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="product_id" constraintName="fk_product_id"
                                  referencedTableName="tbl_product"
                                  referencedColumnNames="product_id"/>
 
