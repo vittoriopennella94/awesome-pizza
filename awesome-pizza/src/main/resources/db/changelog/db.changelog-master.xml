@@ -9,14 +9,24 @@
             <column name="order_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="customer_name" type="varchar(255)"/>
-            <column name="customer_surname" type="varchar(255)"/>
-            <column name="customer_address" type="varchar(255)"/>
-            <column name="customer_street_number" type="varchar(255)"/>
+            <column name="customer_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_street_number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="customer_add_info" type="varchar(255)"/>
-            <column name="order_state" type="bigint"/>
+            <column name="order_state" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
-            <column name="update_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
         </createTable>
 
 
@@ -27,7 +37,7 @@
             <column name="order_id" type="bigint"/>
             <column name="product_id" type="bigint"/>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
-            <column name="update_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
         </createTable>
 
 
@@ -35,23 +45,31 @@
             <column name="product_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="product_name" type="varchar(255)"/>
-            <column name="product_description" type="varchar(255)"/>
-            <column name="product_price" type="decimal(10,2)"/>
-            <column name="product_enable" type="nchar(1)">
+            <column name="product_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_enable" type="nchar(1)" defaultValue="Y">
                 <constraints nullable="false" checkConstraint="product_enable in ('Y', 'N')"/>
             </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
-            <column name="update_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
         </createTable>
 
         <createTable tableName="tbl_order_state">
             <column name="state_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="state_name" type="varchar(255)"/>
+            <column name="state_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
-            <column name="update_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
         </createTable>
 
 
