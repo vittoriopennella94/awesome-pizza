@@ -34,8 +34,16 @@
             <column name="order_product_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="order_id" type="bigint"/>
-            <column name="product_id" type="bigint"/>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(255)"/>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
         </createTable>

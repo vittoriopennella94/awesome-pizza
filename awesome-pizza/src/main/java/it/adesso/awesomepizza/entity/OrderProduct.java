@@ -22,12 +22,18 @@ public class OrderProduct {
     private Long orderProductId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "fk_order_id"))
+    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "fk_order_id"), nullable = false)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_id"))
+    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_id"), nullable = false)
     private Product product;
+
+    @Column(name = "QUANTITY", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "NOTE")
+    private String note;
 
     @CreationTimestamp
     @Column(name = "create_datetime", updatable = false)
