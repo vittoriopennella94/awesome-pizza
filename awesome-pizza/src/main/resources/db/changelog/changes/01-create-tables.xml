@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="vittorio">
+        <createTable tableName="tbl_order">
+            <column name="order_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="customer_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_street_number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_add_info" type="varchar(255)"/>
+            <column name="order_state" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
+        </createTable>
+
+
+        <createTable tableName="tbl_order_product">
+            <column name="order_product_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(255)"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
+        </createTable>
+
+
+        <createTable tableName="tbl_product">
+            <column name="product_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_enable" type="nchar(1)" defaultValue="Y">
+                <constraints nullable="false" checkConstraint="product_enable in ('Y', 'N')"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="tbl_order_state">
+            <column name="state_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="state_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="create_datetime" type="timestamp"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="update_datetime" type="timestamp"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="order_id" constraintName="fk_order_id"
+                                 referencedTableName="tbl_order"
+                                 referencedColumnNames="order_id"/>
+
+        <addForeignKeyConstraint baseTableName="tbl_order_product" baseColumnNames="product_id" constraintName="fk_product_id"
+                                 referencedTableName="tbl_product"
+                                 referencedColumnNames="product_id"/>
+
+        <addForeignKeyConstraint baseTableName="tbl_order" baseColumnNames="order_state" constraintName="fk_order_state_id"
+                                 referencedTableName="tbl_order_state"
+                                 referencedColumnNames="state_id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

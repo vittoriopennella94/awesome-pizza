@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--TBL_ORDER_STATE-->
+    <changeSet id="2" author="vittorio">
+        <insert tableName="tbl_order_state">
+            <column name="state_id" valueNumeric="1"/>
+            <column name="state_name" value="In attesa"/>
+        </insert>
+        <insert tableName="tbl_order_state">
+            <column name="state_id" valueNumeric="2"/>
+            <column name="state_name" value="In preparazione"/>
+        </insert>
+        <insert tableName="tbl_order_state">
+            <column name="state_id" valueNumeric="3"/>
+            <column name="state_name" value="In consegna"/>
+        </insert>
+        <insert tableName="tbl_order_state">
+            <column name="state_id" valueNumeric="4"/>
+            <column name="state_name" value="Consegnato"/>
+        </insert>
+        <insert tableName="tbl_order_state">
+            <column name="state_id" valueNumeric="5"/>
+            <column name="state_name" value="Annullato"/>
+        </insert>
+
+
+        <!--TBL_PRODUCT-->
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Margherita"/>
+            <column name="product_description" value="Pomodoro, mozzarella, basilico"/>
+            <column name="product_price" valueNumeric="6.50"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Marinara"/>
+            <column name="product_description" value="Pomodoro, aglio, origano, olio EVO"/>
+            <column name="product_price" valueNumeric="5.00"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Capricciosa"/>
+            <column name="product_description" value="Pomodoro, mozzarella, prosciutto cotto, funghi, carciofi, olive"/>
+            <column name="product_price" valueNumeric="8.50"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Diavola"/>
+            <column name="product_description" value="Pomodoro, mozzarella, salame piccante"/>
+            <column name="product_price" valueNumeric="7.50"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Quattro Formaggi"/>
+            <column name="product_description" value="Mozzarella, gorgonzola, fontina, parmigiano"/>
+            <column name="product_price" valueNumeric="8.00"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Prosciutto e Funghi"/>
+            <column name="product_description" value="Pomodoro, mozzarella, prosciutto cotto, funghi"/>
+            <column name="product_price" valueNumeric="7.50"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Napoletana"/>
+            <column name="product_description" value="Pomodoro, mozzarella, acciughe, capperi, olive"/>
+            <column name="product_price" valueNumeric="7.00"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Coca Cola 33cl"/>
+            <column name="product_description" value="Bibita gassata"/>
+            <column name="product_price" valueNumeric="2.50"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Birra Moretti 66cl"/>
+            <column name="product_description" value="Birra chiara italiana"/>
+            <column name="product_price" valueNumeric="4.00"/>
+            <column name="product_enable" value="Y"/>
+        </insert>
+        <insert tableName="tbl_product">
+            <column name="product_name" value="Pizza Speciale"/>
+            <column name="product_description" value="Pizza fuori produzione - solo per test"/>
+            <column name="product_price" valueNumeric="15.00"/>
+            <column name="product_enable" value="N"/>
+        </insert>
+
+
+
+        <!--TBL_ORDER-->
+        <insert tableName="tbl_order">
+            <column name="customer_name" value="Mario"/>
+            <column name="customer_surname" value="Rossi"/>
+            <column name="customer_address" value="Via Roma"/>
+            <column name="customer_street_number" value="15"/>
+            <column name="customer_add_info" value="Secondo piano, citofono Rossi"/>
+            <column name="order_state" valueNumeric="4"/>
+        </insert>
+        <insert tableName="tbl_order">
+            <column name="customer_name" value="Lucia"/>
+            <column name="customer_surname" value="Bianchi"/>
+            <column name="customer_address" value="Corso Vittorio Emanuele"/>
+            <column name="customer_street_number" value="42"/>
+            <column name="customer_add_info" value=""/>
+            <column name="order_state" valueNumeric="2"/>
+        </insert>
+        <insert tableName="tbl_order">
+            <column name="customer_name" value="Giuseppe"/>
+            <column name="customer_surname" value="Verdi"/>
+            <column name="customer_address" value="Piazza Garibaldi"/>
+            <column name="customer_street_number" value="8"/>
+            <column name="customer_add_info" value="Portone verde"/>
+            <column name="order_state" valueNumeric="1"/>
+        </insert>
+
+
+
+        <!--TBL_ORDER_PRODUCT-->
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="1"/>
+            <column name="product_id" valueNumeric="1"/>
+            <column name="quantity" valueNumeric="2"/>
+            <column name="note" value="Una ben cotta"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="1"/>
+            <column name="product_id" valueNumeric="4"/>
+            <column name="quantity" valueNumeric="1"/>
+            <column name="note" value="Piccante extra"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="1"/>
+            <column name="product_id" valueNumeric="8"/>
+            <column name="quantity" valueNumeric="2"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="2"/>
+            <column name="product_id" valueNumeric="3"/>
+            <column name="quantity" valueNumeric="1"/>
+            <column name="note" value="Senza olive"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="2"/>
+            <column name="product_id" valueNumeric="5"/>
+            <column name="quantity" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="2"/>
+            <column name="product_id" valueNumeric="9"/>
+            <column name="quantity" valueNumeric="1"/>
+        </insert>
+        <insert tableName="tbl_order_product">
+            <column name="order_id" valueNumeric="3"/>
+            <column name="product_id" valueNumeric="2"/>
+            <column name="quantity" valueNumeric="3"/>
+            <column name="note" value="Poco aglio per favore"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
