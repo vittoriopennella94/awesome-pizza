@@ -16,7 +16,8 @@ public enum OrderStateEnum {
     private String name;
 
     OrderStateEnum(Long id, String name) {
-
+        this.id = id;
+        this.name = name;
     }
 
 
