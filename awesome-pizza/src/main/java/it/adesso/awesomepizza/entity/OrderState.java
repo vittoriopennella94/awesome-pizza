@@ -1,9 +1,7 @@
 package it.adesso.awesomepizza.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +14,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class OrderState {
 
     @Id
@@ -26,7 +26,7 @@ public class OrderState {
     @Column(name = "state_name", nullable = false)
     private String stateName;
 
-    @OneToMany(mappedBy = "orderState")
+    @OneToMany(mappedBy = "orderState", fetch = FetchType.EAGER)
     private List<Order> orders = new ArrayList<>();
 
     @CreationTimestamp

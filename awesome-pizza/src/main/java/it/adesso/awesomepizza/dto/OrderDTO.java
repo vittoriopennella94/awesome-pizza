@@ -1,6 +1,5 @@
 package it.adesso.awesomepizza.dto;
 
-import it.adesso.awesomepizza.entity.OrderProduct;
 import it.adesso.awesomepizza.entity.OrderState;
 import lombok.Data;
 
