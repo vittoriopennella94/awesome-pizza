@@ -12,9 +12,9 @@ import java.util.List;
 
 @SpringBootTest
 public class OrderStateRepositoryTest {
+
     @Autowired
     private OrderStateRepository orderStateRepository;
-
 
     @Test
     public void findAllTest() {

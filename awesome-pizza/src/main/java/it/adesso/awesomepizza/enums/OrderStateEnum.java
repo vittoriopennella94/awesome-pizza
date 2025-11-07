@@ -12,8 +12,8 @@ public enum OrderStateEnum {
     ANNULLATO(5L, "ANNULLATO");
 
 
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 
     OrderStateEnum(Long id, String name) {
         this.id = id;

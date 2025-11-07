@@ -1,5 +1,6 @@
 package it.adesso.awesomepizza.dto;
 
+import it.adesso.awesomepizza.entity.Product;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,7 +16,23 @@ public class ProductDTO implements Serializable {
     private String productDescription;
     private BigDecimal productPrice;
     private String productEnable;
-    private List<OrderProductDTO> orderProducts = new ArrayList<>();
     private LocalDateTime createDatetime;
     private LocalDateTime updateDatetime;
+
+    public static ProductDTO fromEntity(Product product) {
+        if(product == null) {
+            return null;
+        }
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(product.getProductId());
+        productDTO.setProductName(product.getProductName());
+        productDTO.setProductDescription(product.getProductDescription());
+        productDTO.setProductPrice(product.getProductPrice());
+        productDTO.setProductEnable(product.getProductEnable());
+        productDTO.setCreateDatetime(product.getCreateDatetime());
+        productDTO.setUpdateDatetime(product.getUpdateDatetime());
+        
+        return productDTO;
+    }
 }
