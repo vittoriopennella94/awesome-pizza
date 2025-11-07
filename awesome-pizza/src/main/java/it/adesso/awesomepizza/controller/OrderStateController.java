@@ -23,4 +23,9 @@ public class OrderStateController {
         return ResponseEntity.ok(ApiResponse.successNoMessage(orderStates));
     }
 
+    @GetMapping("/api/test")
+    public String test() {
+        throw new RuntimeException("test");
+    }
+
 }
