@@ -22,10 +22,4 @@ public class OrderStateController {
         List<OrderStateDTO> orderStates = this.orderStateService.getStates();
         return ResponseEntity.ok(ApiResponse.successNoMessage(orderStates));
     }
-
-    @GetMapping("/api/test")
-    public String test() {
-        throw new RuntimeException("test");
-    }
-
 }
