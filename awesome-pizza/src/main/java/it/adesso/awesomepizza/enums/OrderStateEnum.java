@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 public enum OrderStateEnum {
-    IN_ATTESA(1L, "IN_ATTESA"),
-    IN_PREPARAZIONE(2L, "IN_PREPARAZIONE"),
-    IN_CONSEGNA(3L, "IN_CONSEGNA"),
+    IN_ATTESA(1L, "IN ATTESA"),
+    IN_PREPARAZIONE(2L, "IN PREPARAZIONE"),
+    IN_CONSEGNA(3L, "IN CONSEGNA"),
     CONSEGNATO(4L, "CONSEGNATO"),
     ANNULLATO(5L, "ANNULLATO");
 

@@ -8,15 +8,15 @@
     <changeSet id="2" author="vittorio">
         <insert tableName="tbl_order_state">
             <column name="state_id" valueNumeric="1"/>
-            <column name="state_name" value="IN_ATTESA"/>
+            <column name="state_name" value="IN ATTESA"/>
         </insert>
         <insert tableName="tbl_order_state">
             <column name="state_id" valueNumeric="2"/>
-            <column name="state_name" value="IN_PREPARAZIONE"/>
+            <column name="state_name" value="IN PREPARAZIONE"/>
         </insert>
         <insert tableName="tbl_order_state">
             <column name="state_id" valueNumeric="3"/>
-            <column name="state_name" value="IN_CONSEGNA"/>
+            <column name="state_name" value="IN CONSEGNA"/>
         </insert>
         <insert tableName="tbl_order_state">
             <column name="state_id" valueNumeric="4"/>
