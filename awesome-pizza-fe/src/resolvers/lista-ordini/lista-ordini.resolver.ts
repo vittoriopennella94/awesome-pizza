@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {forkJoin, map, Observable} from 'rxjs';
-import {Order, Orders, OrderState} from '../../service/orders/orders';
-import {CustomResponse} from '../../service/manager/manager';
+import {Order, OrderService, OrderState} from "../../service/orders/order.service";
+import {CustomResponse} from "../../service/manager/manager.service";
 
 export interface ListaOrdiniData {
   orders: CustomResponse<Order[]>;
@@ -13,7 +13,7 @@ export interface ListaOrdiniData {
 @Injectable({ providedIn: 'root' })
 export class ListaOrdiniResolver implements Resolve<ListaOrdiniData> {
 
-  constructor(private orderService: Orders) {}
+  constructor(private orderService: OrderService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
