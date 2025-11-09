@@ -1,7 +1,7 @@
 <div class="home-container">
   <div class="content">
     <h1 class="title">LISTA ORDINI</h1>
-    <p class="subtitle">Scegli un ordine per vederne il dettaglio e gestirlo</p>
+    <p class="subtitle">Scegli un ordine per vederne il dettaglio</p>
 
     <div class="button-group">
       <!--<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -53,6 +53,49 @@
                     <td mat-cell *matCellDef="let element">{{element[column.id]}}</td>
                 </ng-container>
             }
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Azioni </th>
+                <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu azioni">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        @if (element.orderState === 'IN ATTESA'){
+                            <button mat-menu-item (click)="onView(element)">
+                                <mat-icon>start</mat-icon>
+                                <span>Prendi in carico</span>
+                            </button>
+                        }
+
+                        @if (element.orderState === 'IN PREPARAZIONE'){
+                            <button mat-menu-item (click)="onView(element)">
+                                <mat-icon>start</mat-icon>
+                                <span>In consegna</span>
+                            </button>
+                        }
+
+                        @if (element.orderState === 'IN CONSEGNA'){
+                            <button mat-menu-item (click)="onView(element)">
+                                <mat-icon>check</mat-icon>
+                                <span>Consegnato</span>
+                            </button>
+                        }
+
+                        <mat-divider></mat-divider>
+
+                        @if (element.orderState === 'IN ATTESA' || element.orderState === 'IN PREPARAZIONE') {
+                            <button mat-menu-item (click)="onDelete(element)" class="delete-action">
+                                <mat-icon>delete</mat-icon>
+                                <span>Annulla</span>
+                            </button>
+                        }
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+
             <ng-container matColumnDef="expand">
                 <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
                 <td mat-cell *matCellDef="let element">
@@ -67,7 +110,6 @@
                 </td>
             </ng-container>
 
-            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
             <ng-container matColumnDef="expandedDetail">
                 <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
                     <div class="example-element-detail-wrapper"

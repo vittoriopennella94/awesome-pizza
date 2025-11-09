@@ -7,6 +7,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatDialog} from "@angular/material/dialog";
 import {ProductDetailsDialogComponent} from "../../components/product-details-dialog/product-details-dialog.component";
 import {ProductService} from "../../service/products/product.service";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatDividerModule} from "@angular/material/divider";
 
 
 export interface OrderData {
@@ -26,7 +28,7 @@ export interface HeaderTableData {
 
 @Component({
     selector: 'lista-ordini',
-    imports: [MatTableModule, MatButtonModule, MatIconModule],
+    imports: [MatTableModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule],
     templateUrl: './lista-ordini.html',
     styleUrl: './lista-ordini.scss',
 })
@@ -59,7 +61,7 @@ export class ListaOrdini implements OnInit {
             name: 'State',
         }
     ]
-    columnsToDisplayWithExpand = [...this.header.map(h => h.id), 'expand'];
+    columnsToDisplayWithExpand = [...this.header.map(h => h.id), 'actions', 'expand'];
     expandedElement: OrderData | null | undefined;
     dataSource: OrderData[] = [];
     orderDetails: OrderProduct[] | undefined | null = null;
@@ -128,5 +130,26 @@ export class ListaOrdini implements OnInit {
                 }
             })
         }
+    }
+
+
+    // Azioni del menu
+    onView(element: Order): void {
+        console.log('Visualizza:', element);
+        // Naviga alla pagina dettaglio o apri dialog
+    }
+
+    onEdit(element: Order): void {
+        console.log('Modifica:', element);
+        // Apri dialog di modifica
+    }
+
+    onDelete(element: Order): void {
+        console.log('Elimina:', element);
+    }
+
+    onDuplicate(element: Order): void {
+        console.log('Duplica:', element);
+        // Logica per duplicare
     }
 }
