@@ -1,67 +1,123 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Order, OrderService, OrderState, Product} from "../../service/orders/order.service";
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
-import {Order, Orders, OrderState} from '../../service/orders/orders';
-import {ActivatedRoute} from '@angular/router';
+import {MatDialog} from "@angular/material/dialog";
+import {ProductDetailsDialogComponent} from "../../components/product-details-dialog/product-details-dialog.component";
 
 
 export interface OrderData {
-  orderId: number;
-  orderNumber: number;
-  customerName: string;
-  customerSurname: string;
-  customerAddress: string;
-  customerAddInfo: string;
-  orderState: string;
+    orderId: number;
+    orderNumber: number;
+    customerName: string;
+    customerSurname: string;
+    customerAddress: string;
+    customerAddInfo: string;
+    orderState: string;
 }
 
+export interface HeaderTableData {
+    id: string;
+    name: string;
+}
 
 @Component({
-  selector: 'lista-ordini',
-  imports: [MatTableModule],
-  templateUrl: './lista-ordini.html',
-  styleUrl: './lista-ordini.scss',
+    selector: 'lista-ordini',
+    imports: [MatTableModule, MatButtonModule, MatIconModule],
+    templateUrl: './lista-ordini.html',
+    styleUrl: './lista-ordini.scss',
 })
 export class ListaOrdini implements OnInit {
-  displayedColumns: string[] = ['orderId', 'customerName', 'customerSurname', 'customerAddress', 'customerAddInfo', 'orderState'];
-  dataSource: OrderData[] = [];
+    readonly dialog = inject(MatDialog);
 
-  private orderStates: OrderState[] = [];
-  private orders: Order[] = [];
+    header: HeaderTableData[] = [
+        {
+            id: 'orderNumber',
+            name: 'No.',
+        },
+        {
+            id: 'customerName',
+            name: 'Name',
+        },
+        {
+            id: 'customerSurname',
+            name: 'Surname',
+        },
+        {
+            id: 'customerAddress',
+            name: 'Address',
+        },
+        {
+            id: 'customerAddInfo',
+            name: 'Add. Info',
+        },
+        {
+            id: 'orderState',
+            name: 'State',
+        }
+    ]
+    columnsToDisplayWithExpand = [...this.header.map(h => h.id), 'expand'];
+    expandedElement: OrderData | null | undefined;
+    dataSource: OrderData[] = [];
+    orderDetails: Order | undefined | null = null;
 
-  constructor(private orderService: Orders, private activatedRoute: ActivatedRoute) {
-  }
+    private orderStates: OrderState[] = [];
+    private orders: Order[] = [];
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ data }) => {
-      console.log(data);
-      this.orderStates = data.states.data;
-      this.orders = data.orders.data;
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private orderService: OrderService) {
+    }
 
-      if(this.orders && this.orders.length > 0) {
-        this.orders.forEach(((order, index) => {
-          let orderState = this.orderStates.find(o => o.stateId == order.orderState)?.stateName;
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({data}) => {
+            console.log(data);
+            this.orderStates = data.states.data;
+            this.orders = data.orders.data;
 
-          if(orderState == undefined) {
-            orderState = 'STATO NON DISPONIBILE';
-          }
+            if (this.orders && this.orders.length > 0) {
+                this.orders.forEach(((order, index) => {
+                    this.dataSource.push({
+                        orderId: order.orderId,
+                        orderNumber: index + 1,
+                        customerName: order.customerName,
+                        customerSurname: order.customerSurname,
+                        customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
+                        customerAddInfo: order.customerAddInfo,
+                        orderState: order.orderState
+                    })
+                }))
+            }
 
-          this.dataSource.push({
-            orderId: order.orderId,
-            orderNumber: index + 1,
-            customerName: order.customerName,
-            customerSurname: order.customerSurname,
-            customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
-            customerAddInfo: order.customerAddInfo,
-            orderState: orderState
-          })
-        }))
-      }
+            console.log(this.dataSource);
+        });
+    }
 
-      console.log(this.dataSource);
-    });
-  }
+    onClickProductDetails(product: Product) {
+        console.log(product);
+        this.dialog.open(ProductDetailsDialogComponent, {
+            data: {
+                title: product.productName,
+                description: product.productDescription,
+            }
+        });
+    }
 
-  onClickRow(orderId: number) {
-    console.log(orderId);
-  }
+    isExpanded(element: OrderData) {
+        return this.expandedElement === element;
+    }
+
+    toggle(element: OrderData) {
+        this.orderDetails = null;
+        this.expandedElement = this.isExpanded(element) ? null : element;
+
+        if(this.expandedElement) {
+            this.orderService.getOrderDetails(element.orderId).subscribe(res => {
+                console.log(res);
+                if(res && res.success && res.data){
+                    this.orderDetails = res.data;
+                }
+            })
+        }
+    }
 }
