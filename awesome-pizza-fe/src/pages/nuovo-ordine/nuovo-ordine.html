@@ -21,18 +21,22 @@
                             <mat-label>Nome</mat-label>
                             <input matInput formControlName="customerName" placeholder="Mario">
                             <mat-icon matPrefix>badge</mat-icon>
-                            <mat-error *ngIf="orderForm.get('customerName')?.invalid">
-                                {{ getErrorMessage('customerName') }}
-                            </mat-error>
+                            @if (orderForm.get('customerName')?.invalid){
+                                <mat-error>
+                                    {{ getErrorMessage('customerName') }}
+                                </mat-error>
+                            }
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="form-field">
                             <mat-label>Cognome</mat-label>
                             <input matInput formControlName="customerSurname" placeholder="Rossi">
                             <mat-icon matPrefix>badge</mat-icon>
-                            <mat-error *ngIf="orderForm.get('customerSurname')?.invalid">
-                                {{ getErrorMessage('customerSurname') }}
-                            </mat-error>
+                            @if (orderForm.get('customerSurname')?.invalid){
+                                <mat-error>
+                                    {{ getErrorMessage('customerSurname') }}
+                                </mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -41,17 +45,21 @@
                             <mat-label>Indirizzo</mat-label>
                             <input matInput formControlName="customerAddress" placeholder="Via Roma">
                             <mat-icon matPrefix>home</mat-icon>
-                            <mat-error *ngIf="orderForm.get('customerAddress')?.invalid">
-                                {{ getErrorMessage('customerAddress') }}
-                            </mat-error>
+                            @if (orderForm.get('customerAddress')?.invalid){
+                                <mat-error>
+                                    {{ getErrorMessage('customerAddress') }}
+                                </mat-error>
+                            }
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="form-field-small">
                             <mat-label>Civico</mat-label>
                             <input matInput formControlName="customerStreetNumber" placeholder="10">
-                            <mat-error *ngIf="orderForm.get('customerStreetNumber')?.invalid">
-                                {{ getErrorMessage('customerStreetNumber') }}
-                            </mat-error>
+                            @if (orderForm.get('customerStreetNumber')?.invalid){
+                                <mat-error>
+                                    {{ getErrorMessage('customerStreetNumber') }}
+                                </mat-error>
+                            }
                         </mat-form-field>
                     </div>
 

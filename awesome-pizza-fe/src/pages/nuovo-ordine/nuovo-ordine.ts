@@ -139,6 +139,7 @@ export class NuovoOrdine implements OnInit {
 
             this.orderService.insertOrder(this.orderForm.value).subscribe(res => {
                 console.log(res);
+                window.location.reload();
             });
 
         } else {

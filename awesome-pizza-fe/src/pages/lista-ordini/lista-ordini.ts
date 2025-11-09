@@ -9,6 +9,8 @@ import {ProductDetailsDialogComponent} from "../../components/product-details-di
 import {ProductService} from "../../service/products/product.service";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatDividerModule} from "@angular/material/divider";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatCardModule} from "@angular/material/card";
 
 
 export interface OrderData {
@@ -28,7 +30,8 @@ export interface HeaderTableData {
 
 @Component({
     selector: 'lista-ordini',
-    imports: [MatTableModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule],
+    imports: [MatTableModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule,  MatProgressSpinnerModule,
+        MatCardModule],
     templateUrl: './lista-ordini.html',
     styleUrl: './lista-ordini.scss',
 })
@@ -133,23 +136,35 @@ export class ListaOrdini implements OnInit {
     }
 
 
-    // Azioni del menu
-    onView(element: Order): void {
-        console.log('Visualizza:', element);
-        // Naviga alla pagina dettaglio o apri dialog
+// Helper per le classi CSS degli stati
+    getStatusClass(status: string): string {
+        return status.toLowerCase().replace(/\s+/g, '-');
     }
 
-    onEdit(element: Order): void {
-        console.log('Modifica:', element);
-        // Apri dialog di modifica
+// Azioni del menu
+    onTakeCharge(element: OrderData): void {
+        console.log('Prendi in carico:', element);
+        // Aggiorna stato a "IN PREPARAZIONE"
+        // this.orderService.updateOrderState(element.orderId, 'IN PREPARAZIONE')
     }
 
-    onDelete(element: Order): void {
-        console.log('Elimina:', element);
+    onStartDelivery(element: OrderData): void {
+        console.log('Avvia consegna:', element);
+        // Aggiorna stato a "IN CONSEGNA"
+        // this.orderService.updateOrderState(element.orderId, 'IN CONSEGNA')
     }
 
-    onDuplicate(element: Order): void {
-        console.log('Duplica:', element);
-        // Logica per duplicare
+    onComplete(element: OrderData): void {
+        console.log('Completa ordine:', element);
+        // Aggiorna stato a "CONSEGNATO"
+        // this.orderService.updateOrderState(element.orderId, 'CONSEGNATO')
+    }
+
+    onCancel(element: OrderData): void {
+        if (confirm(`Vuoi annullare l'ordine #${element.orderNumber}?`)) {
+            console.log('Annulla ordine:', element);
+            // Aggiorna stato a "ANNULLATO"
+            // this.orderService.updateOrderState(element.orderId, 'ANNULLATO')
+        }
     }
 }
