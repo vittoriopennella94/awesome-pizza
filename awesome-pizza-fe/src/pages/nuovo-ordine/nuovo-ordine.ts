@@ -12,7 +12,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} f
 import {
     ProductSelectionDialogComponent
 } from "../../components/product-selection-dialog/product-selection-dialog.component";
-import {Product} from "../../service/orders/order.service";
+import {OrderService, Product} from "../../service/orders/order.service";
 
 export interface OrderFormData {
     customerName: string;
@@ -45,7 +45,10 @@ export class NuovoOrdine implements OnInit {
 
     productList: Product[] = [];
 
-    constructor(private activatedRoute: ActivatedRoute, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+    constructor(private activatedRoute: ActivatedRoute,
+                private fb: FormBuilder,
+                private cdr: ChangeDetectorRef,
+                private orderService: OrderService) {
     }
 
     ngOnInit() {
@@ -133,6 +136,10 @@ export class NuovoOrdine implements OnInit {
 
             // Qui chiameresti il tuo service per salvare l'ordine
             // this.orderService.createOrder(this.orderForm.value).subscribe(...)
+
+            this.orderService.insertOrder(this.orderForm.value).subscribe(res => {
+                console.log(res);
+            });
 
         } else {
             console.log('Form non valido');

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ManagerService} from "../manager/manager.service";
+import {OrderFormData} from "../../pages/nuovo-ordine/nuovo-ordine";
 
 export class OrderState {
     stateId: number;
@@ -79,5 +80,9 @@ export class OrderService {
 
     public getOrderDetails(id: number){
         return this.serviceManager.get<OrderProduct[]>("orders/" + id + "/details");
+    }
+
+    public insertOrder(body: OrderFormData){
+        return this.serviceManager.post<any>("orders", body);
     }
 }
