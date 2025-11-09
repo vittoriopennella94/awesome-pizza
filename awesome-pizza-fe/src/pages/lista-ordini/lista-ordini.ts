@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Order, OrderProduct, OrderService, OrderState, Product} from "../../service/orders/order.service";
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -30,8 +30,8 @@ export interface HeaderTableData {
 
 @Component({
     selector: 'lista-ordini',
-    imports: [MatTableModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule,  MatProgressSpinnerModule,
-        MatCardModule],
+    imports: [MatTableModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule, MatProgressSpinnerModule,
+        MatCardModule, RouterLink],
     templateUrl: './lista-ordini.html',
     styleUrl: './lista-ordini.scss',
 })

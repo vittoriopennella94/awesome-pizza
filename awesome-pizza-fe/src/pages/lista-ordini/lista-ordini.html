@@ -7,7 +7,11 @@
             </h1>
             <p class="page-subtitle">Gestisci e monitora tutti gli ordini</p>
         </div>
-        <button mat-raised-button color="primary" class="add-order-btn" routerLink="/orders/new">
+        <button mat-raised-button color="primary" class="add-order-btn" routerLink="/">
+            <mat-icon>home</mat-icon>
+            Home
+        </button>
+        <button mat-raised-button color="primary" class="add-order-btn" routerLink="/nuovo-ordine">
             <mat-icon>add</mat-icon>
             Nuovo Ordine
         </button>
@@ -21,14 +25,14 @@
                     <!-- Colonne dinamiche -->
                     @for (column of header; track column) {
                         <ng-container matColumnDef="{{column.id}}">
-                            <th mat-header-cell *matHeaderCellDef>{{column.name}}</th>
+                            <th mat-header-cell *matHeaderCellDef>{{ column.name }}</th>
                             <td mat-cell *matCellDef="let element">
                                 @if (column.id === 'orderState') {
                                     <span class="status-badge" [class]="'status-' + getStatusClass(element.orderState)">
-                    {{element.orderState}}
+                    {{ element.orderState }}
                   </span>
                                 } @else {
-                                    {{element[column.id]}}
+                                    {{ element[column.id] }}
                                 }
                             </td>
                         </ng-container>
@@ -107,17 +111,17 @@
                                                         <div class="product-header">
                               <span class="product-name"
                                     (click)="onClickProductDetails(product.productId)">
-                                {{product.productName}}
+                                {{ product.productName }}
                               </span>
                                                             <span class="product-quantity">
                                 <mat-icon>shopping_cart</mat-icon>
-                                x{{product.quantity}}
+                                x{{ product.quantity }}
                               </span>
                                                         </div>
                                                         @if (product.note && product.note !== '') {
                                                             <div class="product-note">
                                                                 <mat-icon>note</mat-icon>
-                                                                <span>{{product.note}}</span>
+                                                                <span>{{ product.note }}</span>
                                                             </div>
                                                         }
                                                     </mat-card>
@@ -150,7 +154,7 @@
                         <mat-icon>inbox</mat-icon>
                         <h3>Nessun ordine presente</h3>
                         <p>Inizia creando il tuo primo ordine</p>
-                        <button mat-raised-button color="primary" routerLink="/orders/new">
+                        <button mat-raised-button color="primary" routerLink="/nuovo-oordine">
                             <mat-icon>add</mat-icon>
                             Crea Ordine
                         </button>

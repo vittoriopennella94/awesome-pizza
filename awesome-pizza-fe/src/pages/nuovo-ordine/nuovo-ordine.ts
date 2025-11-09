@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} f
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
@@ -33,7 +33,7 @@ export interface OrderProductForm {
 
 @Component({
     selector: 'nuovo-ordine',
-    imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDividerModule, MatIconModule, MatCardHeader, MatCardTitle, MatCard, MatCardContent, ReactiveFormsModule, MatCardSubtitle],
+    imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDividerModule, MatIconModule, MatCard, MatCardContent, ReactiveFormsModule, RouterLink],
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './nuovo-ordine.html',
     styleUrl: './nuovo-ordine.scss',
@@ -134,12 +134,12 @@ export class NuovoOrdine implements OnInit {
         if (this.orderForm.valid) {
             console.log('Form valido:', this.orderForm.value);
 
-            // Qui chiameresti il tuo service per salvare l'ordine
-            // this.orderService.createOrder(this.orderForm.value).subscribe(...)
-
-            this.orderService.insertOrder(this.orderForm.value).subscribe(res => {
-                console.log(res);
-                window.location.reload();
+            this.orderService.insertOrder(this.orderForm.value).subscribe({
+                next: () => {
+                    this.orderForm.reset();
+                    this.products.clear();
+                    alert('Ordine creato! Puoi crearne un altro.');
+                }
             });
 
         } else {

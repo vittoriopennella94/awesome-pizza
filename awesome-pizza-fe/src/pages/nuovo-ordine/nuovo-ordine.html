@@ -1,11 +1,26 @@
-
 <div class="order-form-container">
-    <mat-card class="form-card">
-        <mat-card-header>
-            <mat-card-title>Nuovo Ordine</mat-card-title>
-            <mat-card-subtitle>Compila i dati del cliente e aggiungi i prodotti</mat-card-subtitle>
-        </mat-card-header>
+    <!-- Header con pulsanti -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <mat-icon>add_shopping_cart</mat-icon>
+                Nuovo Ordine
+            </h1>
+            <p class="page-subtitle">Compila i dati del cliente e aggiungi i prodotti</p>
+        </div>
+        <div class="header-actions">
+            <button mat-raised-button color="primary" class="add-order-btn" routerLink="/">
+                <mat-icon>home</mat-icon>
+                Home
+            </button>
+            <button mat-raised-button color="primary" class="add-order-btn" routerLink="/lista-ordini">
+                <mat-icon>list</mat-icon>
+                Lista Ordini
+            </button>
+        </div>
+    </div>
 
+    <mat-card class="form-card">
         <mat-card-content>
             <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
 
@@ -145,7 +160,7 @@
                 <div class="form-actions">
                     <button mat-stroked-button type="button" (click)="onReset()">
                         <mat-icon>clear</mat-icon>
-                        Annulla
+                        Pulisci Form
                     </button>
                     <button mat-raised-button color="primary" type="submit"
                             [disabled]="orderForm.invalid || products.length === 0">
