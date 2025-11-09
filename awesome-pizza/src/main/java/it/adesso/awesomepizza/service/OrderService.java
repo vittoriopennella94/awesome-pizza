@@ -1,10 +1,11 @@
 package it.adesso.awesomepizza.service;
 
-import it.adesso.awesomepizza.dto.OrderDTO;
-import it.adesso.awesomepizza.dto.OrderDetailsDTO;
-import it.adesso.awesomepizza.dto.OrderProductDTO;
+import it.adesso.awesomepizza.dto.*;
 import it.adesso.awesomepizza.entity.Order;
 import it.adesso.awesomepizza.entity.OrderProduct;
+import it.adesso.awesomepizza.entity.OrderState;
+import it.adesso.awesomepizza.entity.Product;
+import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import org.slf4j.Logger;
@@ -89,6 +90,54 @@ public class OrderService {
         }catch(Exception e){
             LOGGER.error("Error getting Orders", e);
             throw new RuntimeException("Error retrieving orders", e);
+        }
+
+        return result;
+    }
+
+    public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO){
+        OrderDTO result = new OrderDTO();
+
+        try {
+            if(insertOrderDTO != null && insertOrderDTO.getProducts() != null && !insertOrderDTO.getProducts().isEmpty()){
+                Order order = new Order();
+                OrderState orderState = new OrderState();
+
+                orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
+                order.setOrderState(orderState);
+
+                order.setCustomerName(insertOrderDTO.getCustomerName());
+                order.setCustomerSurname(insertOrderDTO.getCustomerSurname());
+                order.setCustomerAddress(insertOrderDTO.getCustomerAddress());
+                order.setCustomerStreetNumber(insertOrderDTO.getCustomerStreetNumber());
+                order.setCustomerAddInfo(insertOrderDTO.getCustomerAddInfo());
+
+
+                List<OrderProduct> orderProducts = new ArrayList<>();
+
+                for(InsertOrderProductDTO p : insertOrderDTO.getProducts()){
+                    OrderProduct orderProduct = new OrderProduct();
+                    orderProduct.setOrder(order);
+
+                    Product product = new Product();
+                    product.setProductId(p.getProductId());
+                    orderProduct.setProduct(product);
+
+                    orderProduct.setQuantity(p.getQuantity());
+                    orderProduct.setNote(p.getNote());
+
+                    orderProducts.add(orderProduct);
+                }
+
+                order.setOrderProducts(orderProducts);
+
+                Order savedOrder = this.orderRepository.save(order);
+
+                result = OrderDTO.fromEntity(savedOrder);
+            }
+        }catch(Exception e){
+            LOGGER.error("Error saving Order", e);
+            throw new RuntimeException("Error saving Order", e);
         }
 
         return result;

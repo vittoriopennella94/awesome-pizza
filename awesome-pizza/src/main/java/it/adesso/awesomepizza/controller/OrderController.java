@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
+
     @Autowired
     private OrderService orderService;
 
@@ -35,8 +36,9 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
-        return null;
+    public ResponseEntity<ApiResponse<OrderDTO>> createOrder(@RequestBody InsertOrderDTO body) {
+        OrderDTO result = this.orderService.saveOrder(body);
+        return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
 
     @PutMapping
