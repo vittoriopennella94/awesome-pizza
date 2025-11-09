@@ -10,5 +10,4 @@ export const routes: Routes = [
   { path: '', component: Homepage }, // Home page
   { path: 'nuovo-ordine', component: NuovoOrdine },
   { path: 'lista-ordini', component: ListaOrdini, resolve: {data: ListaOrdiniResolver}},
-    { path: 'dettaglio-ordine/:id', component: DettaglioOrdineComponent, resolve: {data: DettaglioOrdineResolver}},
 ];

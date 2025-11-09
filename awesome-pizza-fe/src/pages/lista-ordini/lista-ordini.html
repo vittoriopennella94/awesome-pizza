@@ -75,11 +75,11 @@
                         <div class="example-element-detail">
                             <div class="example-element-description">
                                 @if (orderDetails) {
-                                    @for (product of orderDetails.products; track product) {
+                                    @for (product of orderDetails; track product) {
                                         <div class="detail-grid">
                                             <div class="detail-item-horizontal">
                                                 <label>Prodotto</label>
-                                                <span (click)="onClickProductDetails(product.product)" class="custom-span">{{product.product.productName}}</span>
+                                                <span (click)="onClickProductDetails(product.productId)" class="custom-span">{{product.productName}}</span>
                                             </div>
 
                                             <div class="detail-item-horizontal">

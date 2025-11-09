@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -16,11 +17,25 @@ public class OrderRepositoryTest {
 
     @Test
     public void findByOrderIdTest() {
-        Optional<Order> order = this.orderRepository.findOrderById(1L);
+        Order order = this.orderRepository.findOrderById(1L);
         Assertions.assertNotNull(order);
-        Assertions.assertTrue(order.isPresent());
-        Assertions.assertEquals(1L, order.get().getOrderId());
-        Assertions.assertNotNull(order.get().getOrderProducts());
-        Assertions.assertNotEquals(0, order.get().getOrderProducts().size());
+        Assertions.assertEquals(1L, order.getOrderId());
+        Assertions.assertNotNull(order.getOrderState());
+    }
+
+    @Test
+    public void findOrderProductsDetailsById() {
+        Order order = this.orderRepository.findOrderDetailsById(1L);
+        Assertions.assertNotNull(order);
+        Assertions.assertEquals(1L, order.getOrderId());
+        Assertions.assertNotNull(order.getOrderProducts());
+        Assertions.assertFalse(order.getOrderProducts().isEmpty());
+    }
+
+    @Test
+    public void findAllTest() {
+        List<Order> orders = this.orderRepository.getAllOrders();
+        Assertions.assertNotNull(orders);
+        Assertions.assertFalse(orders.isEmpty());
     }
 }

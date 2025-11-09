@@ -1,9 +1,6 @@
 package it.adesso.awesomepizza.controller;
 
-import it.adesso.awesomepizza.dto.ApiResponse;
-import it.adesso.awesomepizza.dto.OrderDTO;
-import it.adesso.awesomepizza.dto.OrderDetailsDTO;
-import it.adesso.awesomepizza.dto.OrderStateDTO;
+import it.adesso.awesomepizza.dto.*;
 import it.adesso.awesomepizza.service.OrderService;
 import it.adesso.awesomepizza.service.OrderStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +17,19 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
-        OrderDetailsDTO result = this.orderService.getOrderDetailsById(id);
+    public ResponseEntity<ApiResponse<OrderDTO>> getOrderById(@PathVariable Long id) {
+        OrderDTO result = this.orderService.getOrderById(id);
+        return ResponseEntity.ok(ApiResponse.successNoMessage(result));
+    }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<ApiResponse<List<OrderProductDTO>>> getOrderDetailsById(@PathVariable Long id) {
+        List<OrderProductDTO> result = this.orderService.getOrderProductDetailsById(id);
         return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllOrders() {
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> getAllOrders() {
         List<OrderDTO> result = this.orderService.getOrders();
         return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }

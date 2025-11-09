@@ -1,11 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Order, OrderService, OrderState, Product} from "../../service/orders/order.service";
+import {Order, OrderProduct, OrderService, OrderState, Product} from "../../service/orders/order.service";
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import {MatDialog} from "@angular/material/dialog";
 import {ProductDetailsDialogComponent} from "../../components/product-details-dialog/product-details-dialog.component";
+import {ProductService} from "../../service/products/product.service";
 
 
 export interface OrderData {
@@ -61,12 +62,15 @@ export class ListaOrdini implements OnInit {
     columnsToDisplayWithExpand = [...this.header.map(h => h.id), 'expand'];
     expandedElement: OrderData | null | undefined;
     dataSource: OrderData[] = [];
-    orderDetails: Order | undefined | null = null;
+    orderDetails: OrderProduct[] | undefined | null = null;
 
     private orderStates: OrderState[] = [];
     private orders: Order[] = [];
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private orderService: OrderService) {
+    constructor(private activatedRoute: ActivatedRoute,
+                private router: Router,
+                private orderService: OrderService,
+                private productService: ProductService) {
     }
 
     ngOnInit() {
@@ -93,12 +97,17 @@ export class ListaOrdini implements OnInit {
         });
     }
 
-    onClickProductDetails(product: Product) {
-        console.log(product);
-        this.dialog.open(ProductDetailsDialogComponent, {
-            data: {
-                title: product.productName,
-                description: product.productDescription,
+    onClickProductDetails(productId: number) {
+        console.log(productId);
+
+        this.productService.getProductById(productId).subscribe(res => {
+            if (res && res.data) {
+                this.dialog.open(ProductDetailsDialogComponent, {
+                    data: {
+                        title: res.data.productName,
+                        description: res.data.productDescription,
+                    }
+                });
             }
         });
     }

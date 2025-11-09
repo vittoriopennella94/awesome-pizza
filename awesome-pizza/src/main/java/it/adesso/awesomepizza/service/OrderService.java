@@ -2,7 +2,9 @@ package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.OrderDTO;
 import it.adesso.awesomepizza.dto.OrderDetailsDTO;
+import it.adesso.awesomepizza.dto.OrderProductDTO;
 import it.adesso.awesomepizza.entity.Order;
+import it.adesso.awesomepizza.entity.OrderProduct;
 import it.adesso.awesomepizza.exception.NotFoundException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import org.slf4j.Logger;
@@ -24,15 +26,42 @@ public class OrderService {
 
 
     @Transactional(readOnly = true)
-    public OrderDetailsDTO getOrderDetailsById(Long orderId){
-        try {
-            Optional<Order> order = orderRepository.findOrderById(orderId);
+    public List<OrderProductDTO> getOrderProductDetailsById(Long orderId){
+        List<OrderProductDTO> result = new ArrayList<>();
 
-            if(order.isEmpty()){
+        try {
+            Order order = orderRepository.findOrderDetailsById(orderId);
+
+            if(order == null || order.getOrderProducts() == null || order.getOrderProducts().isEmpty()){
                 throw new NotFoundException("Order not found: " + orderId);
             }
 
-            return OrderDetailsDTO.fromEntity(order.get());
+            for(OrderProduct op : order.getOrderProducts()){
+                OrderProductDTO dto = OrderProductDTO.fromEntity(op);
+                result.add(dto);
+            }
+
+            return result;
+
+        } catch(NotFoundException e) {
+            LOGGER.warn("Order not found: {}", orderId);
+            throw e;
+        } catch(Exception e) {
+            LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
+            throw new RuntimeException("Error retrieving order", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDTO getOrderById(Long orderId){
+        try {
+            Order order = orderRepository.findOrderById(orderId);
+
+            if(order == null){
+                throw new NotFoundException("Order not found: " + orderId);
+            }
+
+            return OrderDTO.fromEntity(order);
 
         } catch(NotFoundException e) {
             LOGGER.warn("Order not found: {}", orderId);
@@ -48,9 +77,9 @@ public class OrderService {
         List<OrderDTO> result = new ArrayList<>();
 
         try {
-            List<Order> orderList = orderRepository.findAll();
+            List<Order> orderList = orderRepository.getAllOrders();
 
-            if(orderList != null && !orderList.isEmpty()){
+            if(!orderList.isEmpty()){
                 for(Order order : orderList){
                     OrderDTO orderDTO = OrderDTO.fromEntity(order);
                     result.add(orderDTO);
@@ -59,6 +88,7 @@ public class OrderService {
 
         }catch(Exception e){
             LOGGER.error("Error getting Orders", e);
+            throw new RuntimeException("Error retrieving orders", e);
         }
 
         return result;

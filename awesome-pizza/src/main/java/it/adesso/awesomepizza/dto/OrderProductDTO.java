@@ -4,13 +4,12 @@ import it.adesso.awesomepizza.entity.OrderProduct;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class OrderProductDTO implements Serializable {
-    private ProductDTO product;
+    private Long orderId;
+    private Long productId;
+    private String productName;
     private Integer quantity;
     private String note;
 
@@ -21,7 +20,9 @@ public class OrderProductDTO implements Serializable {
         }
 
         OrderProductDTO orderProductDTO = new OrderProductDTO();
-        orderProductDTO.setProduct(orderProduct.getProduct() != null ? ProductDTO.fromEntity(orderProduct.getProduct()) : null);
+        orderProductDTO.setOrderId(orderProduct.getOrder() != null ? orderProduct.getOrder().getOrderId() : null);
+        orderProductDTO.setProductId(orderProduct.getProduct() != null ? orderProduct.getProduct().getProductId() : null);
+        orderProductDTO.setProductName(orderProduct.getProduct() != null ? orderProduct.getProduct().getProductName() : null);
         orderProductDTO.setQuantity(orderProduct.getQuantity());
         orderProductDTO.setNote(orderProduct.getNote());
 

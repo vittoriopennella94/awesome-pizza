@@ -2,6 +2,7 @@ package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.OrderDTO;
 import it.adesso.awesomepizza.dto.OrderDetailsDTO;
+import it.adesso.awesomepizza.dto.OrderProductDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,19 @@ public class OrderServiceTest {
         Assertions.assertFalse(result.isEmpty());
     }
 
+    @Test
+    public void getOrderProductDetailsByIdTest(){
+        List<OrderProductDTO> result = this.orderService.getOrderProductDetailsById(1L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+    }
 
     @Test
     public void findOrderByIdTest(){
-        OrderDetailsDTO result = this.orderService.getOrderDetailsById(1L);
+        OrderDTO result = this.orderService.getOrderById(1L);
 
         Assertions.assertNotNull(result);
-        Assertions.assertNotNull(result.getProducts());
+        Assertions.assertNotNull(result.getOrderId());
     }
 }

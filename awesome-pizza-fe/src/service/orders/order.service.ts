@@ -12,23 +12,29 @@ export class OrderState {
 }
 
 export class OrderProduct {
-    product: Product;
+    orderId: number;
+    productId: number;
+    productName: string;
     quantity: number;
     note?: string;
 
     constructor() {
-        this.product = new Product();
+        this.orderId = 0;
+        this.productId = 0;
         this.quantity = 0;
+        this.productName = "";
         this.note = "";
     }
 }
 
 export class Product {
+    productId: number;
     productName: string;
     productDescription: string;
     productPrice: number;
 
     constructor() {
+        this.productId = 0;
         this.productName = '';
         this.productDescription = '';
         this.productPrice = 0.0;
@@ -43,7 +49,6 @@ export class Order {
     customerStreetNumber: string;
     customerAddInfo: string;
     orderState: string;
-    products?: OrderProduct[];
 
     constructor() {
         this.orderId = 0;
@@ -53,7 +58,6 @@ export class Order {
         this.customerStreetNumber = "";
         this.customerAddInfo = "";
         this.orderState = "";
-        this.products = [];
     }
 }
 
@@ -74,6 +78,6 @@ export class OrderService {
     }
 
     public getOrderDetails(id: number){
-        return this.serviceManager.get<Order>("orders/" + id);
+        return this.serviceManager.get<OrderProduct[]>("orders/" + id + "/details");
     }
 }
