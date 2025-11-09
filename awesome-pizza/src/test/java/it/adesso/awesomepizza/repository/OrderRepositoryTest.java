@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 @SpringBootTest
 public class OrderRepositoryTest {
 
@@ -14,10 +16,11 @@ public class OrderRepositoryTest {
 
     @Test
     public void findByOrderIdTest() {
-        Order order = this.orderRepository.findByOrderId(1L);
+        Optional<Order> order = this.orderRepository.findOrderById(1L);
         Assertions.assertNotNull(order);
-        Assertions.assertEquals(1L, order.getOrderId());
-        Assertions.assertNotNull(order.getOrderProducts());
-        Assertions.assertNotEquals(0, order.getOrderProducts().size());
+        Assertions.assertTrue(order.isPresent());
+        Assertions.assertEquals(1L, order.get().getOrderId());
+        Assertions.assertNotNull(order.get().getOrderProducts());
+        Assertions.assertNotEquals(0, order.get().getOrderProducts().size());
     }
 }

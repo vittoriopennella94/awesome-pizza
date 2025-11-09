@@ -5,16 +5,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class OrderProductDTO implements Serializable {
-    private Long orderProductId;
-    private Long order;
-    private Long product;
+    private ProductDTO product;
     private Integer quantity;
     private String note;
-    private LocalDateTime createDatetime;
-    private LocalDateTime updateDatetime;
 
 
     public static OrderProductDTO fromEntity(OrderProduct orderProduct){
@@ -23,13 +21,9 @@ public class OrderProductDTO implements Serializable {
         }
 
         OrderProductDTO orderProductDTO = new OrderProductDTO();
-        orderProductDTO.setOrderProductId(orderProduct.getOrderProductId());
-        orderProductDTO.setOrder(orderProduct.getOrder() != null ? orderProduct.getOrder().getOrderId() : null);
-        orderProductDTO.setProduct(orderProduct.getProduct() != null ? orderProduct.getProduct().getProductId() : null);
+        orderProductDTO.setProduct(orderProduct.getProduct() != null ? ProductDTO.fromEntity(orderProduct.getProduct()) : null);
         orderProductDTO.setQuantity(orderProduct.getQuantity());
         orderProductDTO.setNote(orderProduct.getNote());
-        orderProductDTO.setCreateDatetime(orderProduct.getCreateDatetime());
-        orderProductDTO.setUpdateDatetime(orderProduct.getUpdateDatetime());
 
         return orderProductDTO;
     }

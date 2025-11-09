@@ -16,8 +16,6 @@ public class ProductDTO implements Serializable {
     private String productDescription;
     private BigDecimal productPrice;
     private String productEnable;
-    private LocalDateTime createDatetime;
-    private LocalDateTime updateDatetime;
 
     public static ProductDTO fromEntity(Product product) {
         if(product == null) {
@@ -30,9 +28,7 @@ public class ProductDTO implements Serializable {
         productDTO.setProductDescription(product.getProductDescription());
         productDTO.setProductPrice(product.getProductPrice());
         productDTO.setProductEnable(product.getProductEnable());
-        productDTO.setCreateDatetime(product.getCreateDatetime());
-        productDTO.setUpdateDatetime(product.getUpdateDatetime());
-        
+
         return productDTO;
     }
 }

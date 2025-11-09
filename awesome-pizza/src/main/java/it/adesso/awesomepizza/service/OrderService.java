@@ -1,15 +1,18 @@
 package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.OrderDTO;
+import it.adesso.awesomepizza.dto.OrderDetailsDTO;
 import it.adesso.awesomepizza.entity.Order;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -19,14 +22,15 @@ public class OrderService {
     private OrderRepository  orderRepository;
 
 
-    public OrderDTO getOrderById(Long orderId){
-        OrderDTO result = null;
+    @Transactional(readOnly = true)
+    public OrderDetailsDTO getOrderDetailsById(Long orderId){
+        OrderDetailsDTO result = null;
 
         try {
-            Order order = orderRepository.findByOrderId(orderId);
+            Optional<Order> order = orderRepository.findOrderById(orderId);
 
-            if(order != null){
-                result = OrderDTO.fromEntity(order);
+            if(order != null && order.isPresent()){
+                result = OrderDetailsDTO.fromEntity(order.get());
             }
         }catch(Exception e){
             LOGGER.error("Error getting Order By OrderId", e);
@@ -35,6 +39,7 @@ public class OrderService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> getOrders(){
         List<OrderDTO> result = new ArrayList<>();
 

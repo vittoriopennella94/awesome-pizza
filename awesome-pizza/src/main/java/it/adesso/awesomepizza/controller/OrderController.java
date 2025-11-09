@@ -2,6 +2,7 @@ package it.adesso.awesomepizza.controller;
 
 import it.adesso.awesomepizza.dto.ApiResponse;
 import it.adesso.awesomepizza.dto.OrderDTO;
+import it.adesso.awesomepizza.dto.OrderDetailsDTO;
 import it.adesso.awesomepizza.dto.OrderStateDTO;
 import it.adesso.awesomepizza.service.OrderService;
 import it.adesso.awesomepizza.service.OrderStateService;
@@ -20,7 +21,8 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable Long id) {
-        return null;
+        OrderDetailsDTO result = this.orderService.getOrderDetailsById(id);
+        return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
 
     @GetMapping("")

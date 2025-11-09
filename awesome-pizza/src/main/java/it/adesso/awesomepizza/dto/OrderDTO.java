@@ -17,9 +17,7 @@ public class OrderDTO implements Serializable {
     private String customerAddress;
     private String customerStreetNumber;
     private String customerAddInfo;
-    private Long orderState;
-    private LocalDateTime createDatetime;
-    private LocalDateTime updateDatetime;
+    private String orderState;
 
     public static OrderDTO fromEntity(Order order) {
         if(order == null) {
@@ -33,9 +31,7 @@ public class OrderDTO implements Serializable {
         orderDTO.setCustomerAddress(order.getCustomerAddress());
         orderDTO.setCustomerStreetNumber(order.getCustomerStreetNumber());
         orderDTO.setCustomerAddInfo(order.getCustomerAddInfo());
-        orderDTO.setOrderState(order.getOrderId());
-        orderDTO.setCreateDatetime(order.getCreateDatetime());
-        orderDTO.setUpdateDatetime(order.getUpdateDatetime());
+        orderDTO.setOrderState(order.getOrderState() != null ? order.getOrderState().getStateName() : "");
 
         return orderDTO;
     }

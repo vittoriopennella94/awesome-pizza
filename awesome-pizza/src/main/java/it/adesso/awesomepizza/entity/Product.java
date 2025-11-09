@@ -36,7 +36,7 @@ public class Product {
     @Column(name = "product_enable", nullable = false)
     private String productEnable = "Y";
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @CreationTimestamp

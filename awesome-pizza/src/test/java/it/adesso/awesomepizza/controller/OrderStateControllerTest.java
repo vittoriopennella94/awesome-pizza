@@ -30,6 +30,9 @@ public class OrderStateControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data").isArray())
-                .andExpect(jsonPath("$.data").isNotEmpty());
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].stateId").exists())
+                .andExpect(jsonPath("$.data[0].stateName").exists());
+
     }
 }

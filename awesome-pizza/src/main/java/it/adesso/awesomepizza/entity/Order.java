@@ -38,11 +38,11 @@ public class Order {
     @Column(name = "customer_add_info")
     private String customerAddInfo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_state", nullable = false, foreignKey = @ForeignKey(name = "fk_order_state_id"))
     private OrderState orderState;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @CreationTimestamp

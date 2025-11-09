@@ -26,9 +26,6 @@ public class OrderState {
     @Column(name = "state_name", nullable = false)
     private String stateName;
 
-    @OneToMany(mappedBy = "orderState", fetch = FetchType.EAGER)
-    private List<Order> orders = new ArrayList<>();
-
     @CreationTimestamp
     @Column(name = "create_datetime", updatable = false)
     private LocalDateTime createDatetime;

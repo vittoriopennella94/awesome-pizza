@@ -16,8 +16,6 @@ import java.util.List;
 public class OrderStateDTO implements Serializable {
     private Long stateId;
     private String stateName;
-    private LocalDateTime createDatetime;
-    private LocalDateTime updateDatetime;
 
     public static OrderStateDTO fromEntity(OrderState orderState) {
         if(orderState == null) {
@@ -27,8 +25,6 @@ public class OrderStateDTO implements Serializable {
         OrderStateDTO orderStateDTO = new OrderStateDTO();
         orderStateDTO.setStateId(orderState.getStateId());
         orderStateDTO.setStateName(orderState.getStateName());
-        orderStateDTO.setCreateDatetime(orderState.getCreateDatetime());
-        orderStateDTO.setUpdateDatetime(orderState.getUpdateDatetime());
 
         return orderStateDTO;
     }

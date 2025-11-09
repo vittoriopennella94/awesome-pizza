@@ -1,10 +1,13 @@
 package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.OrderDTO;
+import it.adesso.awesomepizza.dto.OrderDetailsDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @SpringBootTest
 public class OrderServiceTest {
@@ -13,11 +16,19 @@ public class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    public void findOrderByIdTest(){
-        OrderDTO orderDTO = this.orderService.getOrderById(1L);
+    public void findAllOrdersTest(){
+        List<OrderDTO> result = this.orderService.getOrders();
 
-        Assertions.assertNotNull(orderDTO);
-        Assertions.assertNotNull(orderDTO.getOrderId());
-        Assertions.assertNotNull(orderDTO.getOrderState());
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+    }
+
+
+    @Test
+    public void findOrderByIdTest(){
+        OrderDetailsDTO result = this.orderService.getOrderDetailsById(1L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertNotNull(result.getProducts());
     }
 }
