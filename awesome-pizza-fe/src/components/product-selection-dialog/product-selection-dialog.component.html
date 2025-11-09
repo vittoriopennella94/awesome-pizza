@@ -1,0 +1,87 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>
+        <mat-icon>shopping_basket</mat-icon>
+        Seleziona Prodotto
+    </h2>
+
+    <mat-dialog-content>
+        <!-- Campo di ricerca -->
+        <div class="search-container">
+            <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Cerca prodotto</mat-label>
+                <input matInput
+                       [(ngModel)]="searchTerm"
+                       (input)="onSearch()"
+                       placeholder="Nome o descrizione...">
+                <mat-icon matPrefix>search</mat-icon>
+                @if (searchTerm) {
+                    <button matSuffix mat-icon-button (click)="searchTerm = ''; onSearch()">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Loading spinner -->
+        @if (loading) {
+            <div class="loading-container">
+                <mat-spinner diameter="50"></mat-spinner>
+                <p>Caricamento prodotti...</p>
+            </div>
+        }
+
+        <!-- Lista prodotti -->
+        @if (!loading) {
+            @if (filteredProducts.length > 0) {
+                <mat-selection-list [multiple]="false" class="products-list">
+                    @for (product of filteredProducts; track product.productId) {
+                        <mat-list-option
+                                [value]="product"
+                                [selected]="isSelected(product)"
+                                (click)="onSelectProduct(product)"
+                                class="product-option">
+
+                            <div class="product-item">
+                                <div class="product-header">
+                                    <span class="product-name">{{ product.productName }}</span>
+                                    @if (product.productPrice) {
+                                        <span class="product-price">{{ product.productPrice | currency:'EUR' }}</span>
+                                    }
+                                </div>
+
+                                @if (product.productDescription) {
+                                    <div class="product-description">
+                                        {{ product.productDescription }}
+                                    </div>
+                                }
+                            </div>
+                        </mat-list-option>
+                    }
+                </mat-selection-list>
+            } @else {
+                <div class="no-products">
+                    <mat-icon>inventory_2</mat-icon>
+                    <p>Nessun prodotto trovato</p>
+                    @if (searchTerm) {
+                        <p class="hint">Prova a modificare i termini di ricerca</p>
+                    } @else {
+                        <p class="hint">Non ci sono prodotti disponibili</p>
+                    }
+                </div>
+            }
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="onCancel()">
+            Annulla
+        </button>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!selectedProduct"
+                (click)="onConfirm()">
+            <mat-icon>add</mat-icon>
+            Aggiungi Prodotto
+        </button>
+    </mat-dialog-actions>
+</div>

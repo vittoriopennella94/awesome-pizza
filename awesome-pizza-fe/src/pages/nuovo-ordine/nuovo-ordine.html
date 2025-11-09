@@ -1,1 +1,152 @@
-<p>nuovo-ordine works!</p>
+
+<div class="order-form-container">
+    <mat-card class="form-card">
+        <mat-card-header>
+            <mat-card-title>Nuovo Ordine</mat-card-title>
+            <mat-card-subtitle>Compila i dati del cliente e aggiungi i prodotti</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+
+                <!-- Sezione Dati Cliente -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <mat-icon>person</mat-icon>
+                        Dati Cliente
+                    </h3>
+
+                    <div class="form-row">
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Nome</mat-label>
+                            <input matInput formControlName="customerName" placeholder="Mario">
+                            <mat-icon matPrefix>badge</mat-icon>
+                            <mat-error *ngIf="orderForm.get('customerName')?.invalid">
+                                {{ getErrorMessage('customerName') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Cognome</mat-label>
+                            <input matInput formControlName="customerSurname" placeholder="Rossi">
+                            <mat-icon matPrefix>badge</mat-icon>
+                            <mat-error *ngIf="orderForm.get('customerSurname')?.invalid">
+                                {{ getErrorMessage('customerSurname') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-row">
+                        <mat-form-field appearance="outline" class="form-field-large">
+                            <mat-label>Indirizzo</mat-label>
+                            <input matInput formControlName="customerAddress" placeholder="Via Roma">
+                            <mat-icon matPrefix>home</mat-icon>
+                            <mat-error *ngIf="orderForm.get('customerAddress')?.invalid">
+                                {{ getErrorMessage('customerAddress') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="form-field-small">
+                            <mat-label>Civico</mat-label>
+                            <input matInput formControlName="customerStreetNumber" placeholder="10">
+                            <mat-error *ngIf="orderForm.get('customerStreetNumber')?.invalid">
+                                {{ getErrorMessage('customerStreetNumber') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-row">
+                        <mat-form-field appearance="outline" class="form-field-full">
+                            <mat-label>Informazioni Aggiuntive</mat-label>
+                            <textarea matInput formControlName="customerAddInfo"
+                                      placeholder="Piano, citofono, note consegna..."
+                                      rows="3"></textarea>
+                            <mat-icon matPrefix>info</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Sezione Prodotti -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <mat-icon>shopping_cart</mat-icon>
+                            Prodotti
+                        </h3>
+                        <button mat-raised-button color="primary" type="button"
+                                (click)="openProductDialog()">
+                            <mat-icon>add</mat-icon>
+                            Aggiungi Prodotto
+                        </button>
+                    </div>
+
+                    <!-- Lista Prodotti -->
+                    <div class="products-list" formArrayName="products">
+                        @if (products.length === 0) {
+                            <div class="empty-products">
+                                <mat-icon>shopping_cart</mat-icon>
+                                <p>Nessun prodotto aggiunto</p>
+                                <p class="hint">Clicca su "Aggiungi Prodotto" per iniziare</p>
+                            </div>
+                        }
+
+                        @for (product of products.controls; track $index) {
+                            <mat-card class="product-card" [formGroupName]="$index">
+                                <div class="product-header">
+                                    <div class="product-info">
+                                        <h4>{{ product.get('productName')?.value }}</h4>
+                                    </div>
+                                    <button mat-icon-button color="warn" type="button"
+                                            (click)="removeProduct($index)"
+                                            matTooltip="Rimuovi prodotto">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+
+                                <div class="product-content">
+                                    <div class="quantity-control">
+                                        <label>Quantità</label>
+                                        <div class="quantity-buttons">
+                                            <button mat-icon-button type="button"
+                                                    (click)="decreaseQuantity($index)"
+                                                    [disabled]="product.get('quantity')?.value <= 1">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <input matInput type="number" formControlName="quantity"
+                                                   class="quantity-input" readonly>
+                                            <button mat-icon-button type="button"
+                                                    (click)="increaseQuantity($index)">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <mat-form-field appearance="outline" class="note-field">
+                                        <mat-label>Note</mat-label>
+                                        <input matInput formControlName="note"
+                                               placeholder="Senza cipolla, ben cotta...">
+                                        <mat-icon matPrefix>note</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </mat-card>
+                        }
+                    </div>
+                </div>
+
+                <!-- Pulsanti Azione -->
+                <div class="form-actions">
+                    <button mat-stroked-button type="button" (click)="onReset()">
+                        <mat-icon>clear</mat-icon>
+                        Annulla
+                    </button>
+                    <button mat-raised-button color="primary" type="submit"
+                            [disabled]="orderForm.invalid || products.length === 0">
+                        <mat-icon>save</mat-icon>
+                        Crea Ordine
+                    </button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

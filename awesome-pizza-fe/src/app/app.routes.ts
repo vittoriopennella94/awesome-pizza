@@ -8,6 +8,6 @@ import {DettaglioOrdineResolver} from "../resolvers/dettaglio-ordine/dettaglio-o
 
 export const routes: Routes = [
   { path: '', component: Homepage }, // Home page
-  { path: 'nuovo-ordine', component: NuovoOrdine },
+  { path: 'nuovo-ordine', component: NuovoOrdine, resolve: {data: DettaglioOrdineResolver}},
   { path: 'lista-ordini', component: ListaOrdini, resolve: {data: ListaOrdiniResolver}},
 ];
