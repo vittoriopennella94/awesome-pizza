@@ -392,3 +392,22 @@
     background: #5568d3;
   }
 }
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+
+  button {
+    font-weight: 600;
+    padding: 0 24px;
+    height: 44px;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+
+  button[color="accent"] {
+    box-shadow: 0 2px 8px rgba(255, 64, 129, 0.3);
+  }
+}
