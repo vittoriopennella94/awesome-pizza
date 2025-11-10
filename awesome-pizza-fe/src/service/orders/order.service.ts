@@ -63,6 +63,11 @@ export class Order {
 }
 
 
+export interface UpdateOrderData {
+    orderId: number;
+    stateId: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -83,6 +88,10 @@ export class OrderService {
     }
 
     public insertOrder(body: OrderFormData){
-        return this.serviceManager.post<any>("orders", body);
+        return this.serviceManager.post<Order>("orders", body);
+    }
+
+    public updateOrder(body: UpdateOrderData){
+        return this.serviceManager.put<Order>("orders", body);
     }
 }

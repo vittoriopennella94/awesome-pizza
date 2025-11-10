@@ -42,9 +42,8 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateOrder(@RequestBody OrderDTO orderDTO) {
-        return null;
+    public ResponseEntity<ApiResponse<OrderDTO>> updateOrderState(@RequestBody UpdateOrderDTO body) {
+        OrderDTO result = this.orderService.updateOrderState(body);
+        return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
-
-
 }

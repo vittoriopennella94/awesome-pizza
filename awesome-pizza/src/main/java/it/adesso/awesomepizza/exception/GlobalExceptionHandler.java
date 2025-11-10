@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static it.adesso.awesomepizza.utility.Constants.EXCEPTION_ERROR_MSG;
-import static it.adesso.awesomepizza.utility.Constants.NOT_FOUND_EXCEPTION_ERROR_MSG;
+import static it.adesso.awesomepizza.utility.Constants.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleNotFoundException(NotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(NOT_FOUND_EXCEPTION_ERROR_MSG, HttpStatus.OK.value());
+        return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(NotFoundException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(VALIDATION_EXCEPTION_ERROR_MSG, HttpStatus.OK.value());
         return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
     }
 }

@@ -7,6 +7,7 @@ import it.adesso.awesomepizza.entity.OrderState;
 import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
+import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,71 +24,71 @@ public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    private OrderRepository  orderRepository;
+    private OrderRepository orderRepository;
 
 
     @Transactional(readOnly = true)
-    public List<OrderProductDTO> getOrderProductDetailsById(Long orderId){
+    public List<OrderProductDTO> getOrderProductDetailsById(Long orderId) {
         List<OrderProductDTO> result = new ArrayList<>();
 
         try {
             Order order = orderRepository.findOrderDetailsById(orderId);
 
-            if(order == null || order.getOrderProducts() == null || order.getOrderProducts().isEmpty()){
+            if (order == null || order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) {
                 throw new NotFoundException("Order not found: " + orderId);
             }
 
-            for(OrderProduct op : order.getOrderProducts()){
+            for (OrderProduct op : order.getOrderProducts()) {
                 OrderProductDTO dto = OrderProductDTO.fromEntity(op);
                 result.add(dto);
             }
 
             return result;
 
-        } catch(NotFoundException e) {
+        } catch (NotFoundException e) {
             LOGGER.warn("Order not found: {}", orderId);
             throw e;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
             throw new RuntimeException("Error retrieving order", e);
         }
     }
 
     @Transactional(readOnly = true)
-    public OrderDTO getOrderById(Long orderId){
+    public OrderDTO getOrderById(Long orderId) {
         try {
             Order order = orderRepository.findOrderById(orderId);
 
-            if(order == null){
+            if (order == null) {
                 throw new NotFoundException("Order not found: " + orderId);
             }
 
             return OrderDTO.fromEntity(order);
 
-        } catch(NotFoundException e) {
+        } catch (NotFoundException e) {
             LOGGER.warn("Order not found: {}", orderId);
             throw e;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
             throw new RuntimeException("Error retrieving order", e);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<OrderDTO> getOrders(){
+    public List<OrderDTO> getOrders() {
         List<OrderDTO> result = new ArrayList<>();
 
         try {
             List<Order> orderList = orderRepository.getAllOrders();
 
-            if(!orderList.isEmpty()){
-                for(Order order : orderList){
+            if (!orderList.isEmpty()) {
+                for (Order order : orderList) {
                     OrderDTO orderDTO = OrderDTO.fromEntity(order);
                     result.add(orderDTO);
                 }
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error getting Orders", e);
             throw new RuntimeException("Error retrieving orders", e);
         }
@@ -95,11 +96,11 @@ public class OrderService {
         return result;
     }
 
-    public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO){
+    public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO) {
         OrderDTO result = new OrderDTO();
 
         try {
-            if(insertOrderDTO != null && insertOrderDTO.getProducts() != null && !insertOrderDTO.getProducts().isEmpty()){
+            if (insertOrderDTO != null && insertOrderDTO.getProducts() != null && !insertOrderDTO.getProducts().isEmpty()) {
                 Order order = new Order();
                 OrderState orderState = new OrderState();
 
@@ -115,7 +116,7 @@ public class OrderService {
 
                 List<OrderProduct> orderProducts = new ArrayList<>();
 
-                for(InsertOrderProductDTO p : insertOrderDTO.getProducts()){
+                for (InsertOrderProductDTO p : insertOrderDTO.getProducts()) {
                     OrderProduct orderProduct = new OrderProduct();
                     orderProduct.setOrder(order);
 
@@ -135,9 +136,60 @@ public class OrderService {
 
                 result = OrderDTO.fromEntity(savedOrder);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error saving Order", e);
             throw new RuntimeException("Error saving Order", e);
+        }
+
+        return result;
+    }
+
+    public OrderDTO updateOrderState(UpdateOrderDTO body) {
+        OrderDTO result = new OrderDTO();
+
+        try {
+            if (body == null || body.getStateId() == null || body.getOrderId() == null) {
+                throw new ValidationException();
+            }
+
+            OrderStateEnum nextState = OrderStateEnum.findById(body.getStateId());
+
+            if (nextState == null) {
+                throw new ValidationException("State not found: " + body.getStateId());
+            }
+
+            Order order = orderRepository.findOrderById(body.getOrderId());
+
+            if (order == null) {
+                throw new NotFoundException("Order not found: " + body.getOrderId());
+            }
+
+            if (order.getOrderState() != null) {
+                OrderStateEnum orderState = OrderStateEnum.findById(order.getOrderState().getStateId());
+                if (orderState == nextState) {
+                    throw new ValidationException("State is already in order");
+                }
+            } else {
+                throw new ValidationException("State not found: " + body.getStateId());
+            }
+
+            OrderState orderState = new OrderState();
+            orderState.setStateId(nextState.getId());
+            order.setOrderState(orderState);
+
+            order = this.orderRepository.save(order);
+
+            result = OrderDTO.fromEntity(order);
+
+        } catch (ValidationException e) {
+            LOGGER.warn("Validation KO: {}", body);
+            throw e;
+        } catch (NotFoundException e) {
+            LOGGER.warn("Order not found: {}", body != null ? body.getOrderId() : null);
+            throw e;
+        } catch (Exception e) {
+            LOGGER.error("Error updating Order state", e);
+            throw new RuntimeException("Error updating Order state", e);
         }
 
         return result;
