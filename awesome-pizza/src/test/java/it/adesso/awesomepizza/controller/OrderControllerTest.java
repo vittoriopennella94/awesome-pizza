@@ -1,5 +1,16 @@
 package it.adesso.awesomepizza.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.adesso.awesomepizza.dto.InsertOrderDTO;
+import it.adesso.awesomepizza.dto.InsertOrderProductDTO;
+import it.adesso.awesomepizza.dto.OrderDTO;
+import it.adesso.awesomepizza.dto.OrderProductDTO;
+import it.adesso.awesomepizza.entity.Order;
+import it.adesso.awesomepizza.entity.OrderProduct;
+import it.adesso.awesomepizza.entity.OrderState;
+import it.adesso.awesomepizza.entity.Product;
+import it.adesso.awesomepizza.enums.OrderStateEnum;
+import it.adesso.awesomepizza.repository.OrderRepository;
 import it.adesso.awesomepizza.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +21,16 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static it.adesso.awesomepizza.utility.Constants.EXCEPTION_ERROR_MSG;
 import static it.adesso.awesomepizza.utility.Constants.NOT_FOUND_EXCEPTION_ERROR_MSG;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +43,13 @@ public class OrderControllerTest {
 
     @MockitoSpyBean
     private OrderService orderService;
+
+    @MockitoSpyBean
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @Test
     public void getAllOrdersTestOk() throws Exception {
@@ -160,5 +184,107 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.status").value(200))
                 .andExpect(jsonPath("$.data.message").isString())
                 .andExpect(jsonPath("$.data.message").value(NOT_FOUND_EXCEPTION_ERROR_MSG));
+    }
+
+
+    @Test
+    public void insertOrderTestOk() throws Exception {
+        OrderDTO inputDTO = new OrderDTO();
+        inputDTO.setCustomerName(getInsertOrderDTO().getCustomerName());
+        inputDTO.setCustomerSurname(getInsertOrderDTO().getCustomerSurname());
+        inputDTO.setCustomerAddress(getInsertOrderDTO().getCustomerAddress());
+        inputDTO.setCustomerStreetNumber(getInsertOrderDTO().getCustomerStreetNumber());
+        inputDTO.setOrderState(OrderStateEnum.IN_ATTESA.getName());
+
+        when(this.orderService.saveOrder(getInsertOrderDTO())).thenReturn(inputDTO);
+
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(getInsertOrderDTO())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.customerName").exists())
+                .andExpect(jsonPath("$.data.customerName").value(getInsertOrderDTO().getCustomerName()))
+                .andExpect(jsonPath("$.data.customerSurname").exists())
+                .andExpect(jsonPath("$.data.customerSurname").value(getInsertOrderDTO().getCustomerSurname()))
+                .andExpect(jsonPath("$.data.customerAddress").exists())
+                .andExpect(jsonPath("$.data.customerStreetNumber").exists())
+                .andExpect(jsonPath("$.data.orderState").exists());
+    }
+
+
+    @Test
+    public void insertOrder_thenThrowsException() throws Exception {
+        OrderDTO inputDTO = new OrderDTO();
+        inputDTO.setCustomerName(getInsertOrderDTO().getCustomerName());
+        inputDTO.setCustomerSurname(getInsertOrderDTO().getCustomerSurname());
+        inputDTO.setCustomerAddress(getInsertOrderDTO().getCustomerAddress());
+        inputDTO.setCustomerStreetNumber(getInsertOrderDTO().getCustomerStreetNumber());
+        inputDTO.setOrderState(OrderStateEnum.IN_ATTESA.getName());
+
+        Order order = new Order();
+        OrderState orderState = new OrderState();
+
+        orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
+        order.setOrderState(orderState);
+
+        order.setCustomerName("CUSTOMER_NAME");
+        order.setCustomerSurname("CUSTOMER_SURNAME");
+        order.setCustomerAddress("CUSTOMER_ADDRESS");
+        order.setCustomerStreetNumber("CUSTOMER_STREET");
+        order.setCustomerAddInfo("CUSTOMER_ADDINFO");
+
+        List<OrderProduct> orderProducts = new ArrayList<>();
+
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setOrder(order);
+
+        Product product = new Product();
+        product.setProductId(1L);
+        orderProduct.setProduct(product);
+
+        orderProduct.setQuantity(3);
+        orderProduct.setNote("PRODUCT_NOTE");
+
+        orderProducts.add(orderProduct);
+
+        order.setOrderProducts(orderProducts);
+
+        when(this.orderRepository.save(order)).thenThrow(new RuntimeException());
+
+        when(this.orderService.saveOrder(any(InsertOrderDTO.class)))
+                .thenThrow(new RuntimeException("Errore DB"));
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(getInsertOrderDTO())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data.status").isNumber())
+                .andExpect(jsonPath("$.data.status").value(500))
+                .andExpect(jsonPath("$.data.message").isString())
+                .andExpect(jsonPath("$.data.message").value(EXCEPTION_ERROR_MSG));
+    }
+
+
+    private static InsertOrderDTO getInsertOrderDTO() {
+        InsertOrderDTO insertOrderDTO = new InsertOrderDTO();
+        insertOrderDTO.setCustomerName("Mario");
+        insertOrderDTO.setCustomerSurname("Rossi");
+        insertOrderDTO.setCustomerAddress("Via Roma");
+        insertOrderDTO.setCustomerStreetNumber("10");
+
+        List<InsertOrderProductDTO> insertOrderProductDTOList = new ArrayList<>();
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        insertOrderProductDTO.setQuantity(3);
+        insertOrderProductDTO.setNote("PRODUCT_NOTE");
+
+        insertOrderDTO.setProducts(insertOrderProductDTOList);
+        return insertOrderDTO;
     }
 }
