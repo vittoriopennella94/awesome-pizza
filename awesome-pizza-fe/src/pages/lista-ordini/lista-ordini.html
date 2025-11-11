@@ -19,6 +19,29 @@
         </div>
     </div>
 
+    <div class="page-sub-header">
+        <div class="sub-header-actions">
+            <button mat-raised-button  class="status-order-btn" (click)="onChangeFilterState('ALL')">
+                Tutti
+            </button>
+            <button mat-raised-button  class="status-order-btn status-in-attesa" (click)="onChangeFilterState('IN ATTESA')">
+                In Attesa
+            </button>
+            <button mat-raised-button class="status-order-btn status-in-preparazione" (click)="onChangeFilterState('IN PREPARAZIONE')">
+                In Preparazione
+            </button>
+            <button mat-raised-button class="status-order-btn status-in-consegna" (click)="onChangeFilterState('IN CONSEGNA')">
+                In Consegna
+            </button>
+            <button mat-raised-button class="status-order-btn status-consegnato" (click)="onChangeFilterState('CONSEGNATO')">
+                Consegnato
+            </button>
+            <button mat-raised-button class="status-order-btn status-annullato" (click)="onChangeFilterState('ANNULLATO')">
+                Annullato
+            </button>
+        </div>
+    </div>
+
     <mat-card class="table-card">
         <mat-card-content>
             <div class="table-wrapper">
@@ -155,11 +178,12 @@
                     <div class="empty-state">
                         <mat-icon>inbox</mat-icon>
                         <h3>Nessun ordine presente</h3>
-                        <p>Inizia creando il tuo primo ordine</p>
+
+                        <!--<p>Inizia creando il tuo primo ordine</p>
                         <button mat-raised-button color="primary" routerLink="/nuovo-oordine">
                             <mat-icon>add</mat-icon>
                             Crea Ordine
-                        </button>
+                        </button>-->
                     </div>
                 }
             </div>

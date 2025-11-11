@@ -78,6 +78,8 @@ export class ListaOrdini implements OnInit {
 
     private orderStates: OrderState[] = [];
     private orders: Order[] = [];
+    private ordersByState: Order[] = [];
+    private selectedState = 'ALL';
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
@@ -86,10 +88,13 @@ export class ListaOrdini implements OnInit {
     }
 
     ngOnInit() {
+        this.selectedState = 'ALL';
+
         this.activatedRoute.data.subscribe(({data}) => {
             console.log(data);
             this.orderStates = data.states.data;
             this.orders = data.orders.data;
+            this.ordersByState = this.orders;
 
             if (this.orders && this.orders.length > 0) {
                 this.orders.forEach(((order, index) => {
@@ -101,8 +106,10 @@ export class ListaOrdini implements OnInit {
                         customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
                         customerAddInfo: order.customerAddInfo,
                         orderState: order.orderState
-                    })
-                }))
+                    });
+                }));
+
+                this.onChangeFilterState(this.selectedState);
             }
 
             console.log(this.dataSource);
@@ -182,6 +189,31 @@ export class ListaOrdini implements OnInit {
         }
     }
 
+    onChangeFilterState(state: string){
+        console.log("STATO SELEZIONATO: " + state);
+        if(state){
+            this.selectedState = state;
+            if(state === 'ALL'){
+                this.ordersByState = this.orders;
+            }else {
+                this.ordersByState = this.orders.filter(order => order.orderState === state);
+            }
+
+            this.dataSource = [];
+            this.ordersByState.forEach(((order, index) => {
+                this.dataSource.push({
+                    orderId: order.orderId,
+                    orderNumber: index + 1,
+                    customerName: order.customerName,
+                    customerSurname: order.customerSurname,
+                    customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
+                    customerAddInfo: order.customerAddInfo,
+                    orderState: order.orderState
+                })
+            }))
+        }
+    }
+
     private updateOrderState(orderId: number, stateName: string) {
         let nextState = this.orderStates.find(o => o.stateName === stateName)?.stateId ?? 0;
 
@@ -202,6 +234,7 @@ export class ListaOrdini implements OnInit {
             console.log(res);
             if(res && res.data && res.data.length > 0) {
                 this.orders = res.data;
+                this.ordersByState = this.orders;
                 this.dataSource = [];
                 this.orders.forEach(((order, index) => {
                     this.dataSource.push({
@@ -212,8 +245,10 @@ export class ListaOrdini implements OnInit {
                         customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
                         customerAddInfo: order.customerAddInfo,
                         orderState: order.orderState
-                    })
-                }))
+                    });
+                }));
+
+                this.onChangeFilterState(this.selectedState);
             }
         })
     }
