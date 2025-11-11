@@ -27,12 +27,18 @@
             <button mat-raised-button  class="status-order-btn status-in-attesa" (click)="onChangeFilterState('IN ATTESA')">
                 In Attesa
             </button>
+        </div>
+
+        <div class="sub-header-actions">
             <button mat-raised-button class="status-order-btn status-in-preparazione" (click)="onChangeFilterState('IN PREPARAZIONE')">
                 In Preparazione
             </button>
             <button mat-raised-button class="status-order-btn status-in-consegna" (click)="onChangeFilterState('IN CONSEGNA')">
                 In Consegna
             </button>
+        </div>
+
+        <div class="sub-header-actions">
             <button mat-raised-button class="status-order-btn status-consegnato" (click)="onChangeFilterState('CONSEGNATO')">
                 Consegnato
             </button>
@@ -41,6 +47,7 @@
             </button>
         </div>
     </div>
+
 
     <mat-card class="table-card">
         <mat-card-content>

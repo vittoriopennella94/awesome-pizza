@@ -390,6 +390,10 @@
     flex-direction: column;
     gap: 16px;
   }
+  .page-sub-header {
+    flex-direction: column;
+    gap: 16px;
+  }
 
   .add-order-btn {
     width: 100%;
@@ -459,16 +463,13 @@
 .sub-header-actions {
   display: flex;
   gap: 12px;
-  align-content: center;
 
   button {
     font-weight: 600;
     padding: 0 24px;
     height: 44px;
-
-    mat-icon {
-      margin-right: 4px;
-    }
+    flex: 1 1 auto; // I pulsanti si adattano
+    min-width: 150px; // Larghezza minima
   }
 
   button[color="accent"] {
