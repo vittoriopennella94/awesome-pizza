@@ -2,6 +2,7 @@ package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.*;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
+import it.adesso.awesomepizza.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.adesso.awesomepizza.utility.Constants.UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG;
 
 @SpringBootTest
 public class OrderServiceTest {
@@ -22,6 +25,30 @@ public class OrderServiceTest {
 
         Assertions.assertNotNull(result);
         Assertions.assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void findAllOrdersByStateTest(){
+        List<OrderDTO> result = this.orderService.getOrdersByState(1L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+
+        result.forEach(orderDTO -> {
+            Assertions.assertNotNull(orderDTO.getOrderState());
+            Assertions.assertEquals(orderDTO.getOrderState(), OrderStateEnum.IN_ATTESA.getName());
+        });
+    }
+
+    @Test
+    public void findAllOrdersByStateTestKo_StateId_Not_Found() throws ValidationException {
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            List<OrderDTO> result = this.orderService.getOrdersByState(10L);
+        });
+
+        Assertions.assertEquals(UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG, validationException.getMessage());
+
     }
 
     @Test

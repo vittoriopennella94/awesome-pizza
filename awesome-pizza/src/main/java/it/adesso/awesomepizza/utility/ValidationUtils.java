@@ -28,4 +28,10 @@ public class ValidationUtils {
             throw new ValidationException(UPDATE_STATE_BODY_ORDER_ID_NULL_MSG);
         }
     }
+
+    public static void getAllOrdersByState(Long stateId) throws ValidationException{
+        if(OrderStateEnum.findById(stateId) == null){
+            throw new ValidationException(UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG);
+        }
+    }
 }

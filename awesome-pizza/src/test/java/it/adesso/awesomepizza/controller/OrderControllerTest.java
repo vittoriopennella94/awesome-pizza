@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static it.adesso.awesomepizza.utility.Constants.EXCEPTION_ERROR_MSG;
-import static it.adesso.awesomepizza.utility.Constants.NOT_FOUND_EXCEPTION_ERROR_MSG;
+import static it.adesso.awesomepizza.utility.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -68,6 +67,42 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data[0].customerStreetNumber").exists())
                 .andExpect(jsonPath("$.data[0].customerAddInfo").exists())
                 .andExpect(jsonPath("$.data[0].orderState").exists());
+    }
+
+    @Test
+    public void getAllOrdersByStateTestOk() throws Exception {
+        mockMvc.perform(get("/api/orders?stateId=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].orderId").exists())
+                .andExpect(jsonPath("$.data[0].customerName").exists())
+                .andExpect(jsonPath("$.data[0].customerSurname").exists())
+                .andExpect(jsonPath("$.data[0].customerAddress").exists())
+                .andExpect(jsonPath("$.data[0].customerStreetNumber").exists())
+                .andExpect(jsonPath("$.data[0].customerAddInfo").exists())
+                .andExpect(jsonPath("$.data[0].orderState").exists())
+                .andExpect(jsonPath("$.data[0].orderState").value(OrderStateEnum.IN_ATTESA.getName()));
+
+    }
+
+    @Test
+    public void getAllOrdersByStateTestKo_StateId_Not_Found() throws Exception {
+        mockMvc.perform(get("/api/orders?stateId=12")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data.status").isNumber())
+                .andExpect(jsonPath("$.data.status").value(200))
+                .andExpect(jsonPath("$.data.message").isString())
+                .andExpect(jsonPath("$.data.message").value(UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG));
     }
 
     @Test

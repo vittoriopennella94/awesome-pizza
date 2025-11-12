@@ -103,6 +103,8 @@ public class OrderService {
     public List<OrderDTO> getOrdersByState(Long stateId) {
         List<OrderDTO> result = new ArrayList<>();
 
+        ValidationUtils.getAllOrdersByState(stateId);
+
         try {
             List<Order> orderList = orderRepository.getAllOrdersByState(stateId);
 

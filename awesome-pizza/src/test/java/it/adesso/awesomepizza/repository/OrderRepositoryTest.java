@@ -46,6 +46,18 @@ public class OrderRepositoryTest {
     }
 
     @Test
+    public void findAllByStateTest() {
+        List<Order> orders = this.orderRepository.getAllOrdersByState(1L);
+        Assertions.assertNotNull(orders);
+        Assertions.assertFalse(orders.isEmpty());
+
+        orders.forEach(order -> {
+            Assertions.assertNotNull(order.getOrderState());
+            Assertions.assertEquals(1L, order.getOrderState().getStateId());
+        });
+    }
+
+    @Test
     public void saveOrderTest(){
         Order order = new Order();
         OrderState orderState = new OrderState();
