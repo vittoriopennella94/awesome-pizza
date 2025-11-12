@@ -18,6 +18,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatCardModule} from "@angular/material/card";
+import {OrderStateEnum} from "../../enums/order-state.enum";
 
 
 export interface OrderData {
@@ -78,8 +79,7 @@ export class ListaOrdini implements OnInit {
 
     private orderStates: OrderState[] = [];
     private orders: Order[] = [];
-    private ordersByState: Order[] = [];
-    private selectedState = 'ALL';
+    private selectedState = 0;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
@@ -88,13 +88,12 @@ export class ListaOrdini implements OnInit {
     }
 
     ngOnInit() {
-        this.selectedState = 'ALL';
+        this.selectedState = 0;
 
         this.activatedRoute.data.subscribe(({data}) => {
             console.log(data);
             this.orderStates = data.states.data;
             this.orders = data.orders.data;
-            this.ordersByState = this.orders;
 
             if (this.orders && this.orders.length > 0) {
                 this.orders.forEach(((order, index) => {
@@ -189,28 +188,22 @@ export class ListaOrdini implements OnInit {
         }
     }
 
-    onChangeFilterState(state: string){
-        console.log("STATO SELEZIONATO: " + state);
-        if(state){
-            this.selectedState = state;
-            if(state === 'ALL'){
-                this.ordersByState = this.orders;
-            }else {
-                this.ordersByState = this.orders.filter(order => order.orderState === state);
-            }
+    onChangeFilterState(stateId: number){
+        console.log("STATO SELEZIONATO: " + stateId);
 
-            this.dataSource = [];
-            this.ordersByState.forEach(((order, index) => {
-                this.dataSource.push({
-                    orderId: order.orderId,
-                    orderNumber: index + 1,
-                    customerName: order.customerName,
-                    customerSurname: order.customerSurname,
-                    customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
-                    customerAddInfo: order.customerAddInfo,
-                    orderState: order.orderState
-                })
-            }))
+        this.selectedState = stateId;
+        if(stateId === 0){
+            this.orderService.getAllOrders().subscribe(res => {
+                if(res && res.data){
+                    this.orderToDataSource(res.data);
+                }
+            });
+        }else {
+            this.orderService.getAllOrders(stateId).subscribe(res => {
+                if(res && res.data){
+                    this.orderToDataSource(res.data);
+                }
+            });
         }
     }
 
@@ -224,32 +217,26 @@ export class ListaOrdini implements OnInit {
         this.orderService.updateOrder(body).subscribe(res => {
             console.log(res);
             if(res && res.data) {
-                this.updateDataSource();
-            }
-        })
-    }
-
-    private updateDataSource(){
-        this.orderService.getAllOrders().subscribe(res => {
-            console.log(res);
-            if(res && res.data && res.data.length > 0) {
-                this.orders = res.data;
-                this.ordersByState = this.orders;
-                this.dataSource = [];
-                this.orders.forEach(((order, index) => {
-                    this.dataSource.push({
-                        orderId: order.orderId,
-                        orderNumber: index + 1,
-                        customerName: order.customerName,
-                        customerSurname: order.customerSurname,
-                        customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
-                        customerAddInfo: order.customerAddInfo,
-                        orderState: order.orderState
-                    });
-                }));
-
                 this.onChangeFilterState(this.selectedState);
             }
         })
     }
+
+    private orderToDataSource(orders: Order[]) {
+        this.orders = orders;
+        this.dataSource = [];
+        this.orders.forEach(((order, index) => {
+            this.dataSource.push({
+                orderId: order.orderId,
+                orderNumber: index + 1,
+                customerName: order.customerName,
+                customerSurname: order.customerSurname,
+                customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
+                customerAddInfo: order.customerAddInfo,
+                orderState: order.orderState
+            })
+        }))
+    }
+
+    protected readonly OrderStateEnum = OrderStateEnum;
 }

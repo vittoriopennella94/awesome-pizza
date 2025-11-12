@@ -21,28 +21,28 @@
 
     <div class="page-sub-header">
         <div class="sub-header-actions">
-            <button mat-raised-button  class="status-order-btn" (click)="onChangeFilterState('ALL')">
+            <button mat-raised-button  class="status-order-btn" (click)="onChangeFilterState(0)">
                 Tutti
             </button>
-            <button mat-raised-button  class="status-order-btn status-in-attesa" (click)="onChangeFilterState('IN ATTESA')">
+            <button mat-raised-button  class="status-order-btn status-in-attesa" (click)="onChangeFilterState(OrderStateEnum.IN_ATTESA)">
                 In Attesa
             </button>
         </div>
 
         <div class="sub-header-actions">
-            <button mat-raised-button class="status-order-btn status-in-preparazione" (click)="onChangeFilterState('IN PREPARAZIONE')">
+            <button mat-raised-button class="status-order-btn status-in-preparazione" (click)="onChangeFilterState(OrderStateEnum.IN_PREPARAZIONE)">
                 In Preparazione
             </button>
-            <button mat-raised-button class="status-order-btn status-in-consegna" (click)="onChangeFilterState('IN CONSEGNA')">
+            <button mat-raised-button class="status-order-btn status-in-consegna" (click)="onChangeFilterState(OrderStateEnum.IN_CONSEGNA)">
                 In Consegna
             </button>
         </div>
 
         <div class="sub-header-actions">
-            <button mat-raised-button class="status-order-btn status-consegnato" (click)="onChangeFilterState('CONSEGNATO')">
+            <button mat-raised-button class="status-order-btn status-consegnato" (click)="onChangeFilterState(OrderStateEnum.CONSEGNATO)">
                 Consegnato
             </button>
-            <button mat-raised-button class="status-order-btn status-annullato" (click)="onChangeFilterState('ANNULLATO')">
+            <button mat-raised-button class="status-order-btn status-annullato" (click)="onChangeFilterState(OrderStateEnum.ANNULLATO)">
                 Annullato
             </button>
         </div>

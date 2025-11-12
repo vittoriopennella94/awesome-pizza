@@ -79,8 +79,12 @@ export class OrderService {
         return this.serviceManager.get<OrderState[]>("states");
     }
 
-    public getAllOrders(){
-        return this.serviceManager.get<Order[]>("orders");
+    public getAllOrders(stateId?: number){
+        if(stateId){
+            return this.serviceManager.get<Order[]>("orders?stateId="+stateId);
+        }else {
+            return this.serviceManager.get<Order[]>("orders");
+        }
     }
 
     public getOrderDetails(id: number){
