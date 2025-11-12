@@ -9,6 +9,7 @@ import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
+import it.adesso.awesomepizza.utility.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static it.adesso.awesomepizza.utility.Constants.UPDATE_STATE_BODY_ORDER_ID_NOT_FOUND_MSG;
 
 @Service
 public class OrderService {
@@ -96,6 +99,28 @@ public class OrderService {
         return result;
     }
 
+    @Transactional(readOnly = true)
+    public List<OrderDTO> getOrdersByState(Long stateId) {
+        List<OrderDTO> result = new ArrayList<>();
+
+        try {
+            List<Order> orderList = orderRepository.getAllOrdersByState(stateId);
+
+            if (!orderList.isEmpty()) {
+                for (Order order : orderList) {
+                    OrderDTO orderDTO = OrderDTO.fromEntity(order);
+                    result.add(orderDTO);
+                }
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("Error getting Orders", e);
+            throw new RuntimeException("Error retrieving orders", e);
+        }
+
+        return result;
+    }
+
     public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO) {
         OrderDTO result = new OrderDTO();
 
@@ -148,33 +173,27 @@ public class OrderService {
         OrderDTO result = new OrderDTO();
 
         try {
-            if (body == null || body.getStateId() == null || body.getOrderId() == null) {
-                throw new ValidationException();
-            }
+            ValidationUtils.updateStateBodyValidation(body);
 
             OrderStateEnum nextState = OrderStateEnum.findById(body.getStateId());
-
-            if (nextState == null) {
-                throw new ValidationException("State not found: " + body.getStateId());
-            }
 
             Order order = orderRepository.findOrderById(body.getOrderId());
 
             if (order == null) {
-                throw new NotFoundException("Order not found: " + body.getOrderId());
+                throw new NotFoundException(UPDATE_STATE_BODY_ORDER_ID_NOT_FOUND_MSG + ": " + body.getOrderId());
             }
 
             if (order.getOrderState() != null) {
                 OrderStateEnum orderState = OrderStateEnum.findById(order.getOrderState().getStateId());
                 if (orderState == nextState) {
-                    throw new ValidationException("State is already in order");
+                    throw new ValidationException("Order state is already updated");
                 }
             } else {
-                throw new ValidationException("State not found: " + body.getStateId());
+                throw new ValidationException("Order State not found: " + body.getStateId());
             }
 
             OrderState orderState = new OrderState();
-            orderState.setStateId(nextState.getId());
+            orderState.setStateId(body.getStateId());
             order.setOrderState(orderState);
 
             order = this.orderRepository.save(order);
@@ -182,10 +201,10 @@ public class OrderService {
             result = OrderDTO.fromEntity(order);
 
         } catch (ValidationException e) {
-            LOGGER.warn("Validation KO: {}", body);
+            LOGGER.warn("Validation KO: {}", e.getMessage());
             throw e;
         } catch (NotFoundException e) {
-            LOGGER.warn("Order not found: {}", body != null ? body.getOrderId() : null);
+            LOGGER.warn("Not found: {}", body.getOrderId());
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error updating Order state", e);

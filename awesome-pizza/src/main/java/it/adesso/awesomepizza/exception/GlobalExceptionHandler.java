@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(NotFoundException exception) {
-        ErrorResponse errorResponse = new ErrorResponse(VALIDATION_EXCEPTION_ERROR_MSG, HttpStatus.OK.value());
-        return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(ValidationException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
+        return ResponseEntity.ok(ApiResponse.error(errorResponse, VALIDATION_EXCEPTION_ERROR_MSG));
     }
 }

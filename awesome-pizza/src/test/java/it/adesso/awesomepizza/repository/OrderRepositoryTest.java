@@ -86,4 +86,26 @@ public class OrderRepositoryTest {
         Assertions.assertNotNull(savedOrder.getOrderProducts());
         Assertions.assertFalse(order.getOrderProducts().isEmpty());
     }
+
+    @Test
+    public void updateOrderStateTest(){
+        Order order = this.orderRepository.findOrderById(1L);
+
+        Assertions.assertNotNull(order);
+
+        Assertions.assertEquals(1L, order.getOrderId());
+        Assertions.assertNotNull(order.getOrderState());
+
+        OrderState orderState = new OrderState();
+        orderState.setStateId(OrderStateEnum.ANNULLATO.getId());
+
+        order.setOrderState(orderState);
+
+        order = this.orderRepository.save(order);
+
+        Assertions.assertNotNull(order);
+        Assertions.assertEquals(1L, order.getOrderId());
+        Assertions.assertNotNull(order.getOrderState());
+        Assertions.assertEquals(OrderStateEnum.ANNULLATO.getId(), order.getOrderState().getStateId());
+    }
 }

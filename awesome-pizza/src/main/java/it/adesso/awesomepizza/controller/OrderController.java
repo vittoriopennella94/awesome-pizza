@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin()
@@ -30,8 +31,15 @@ public class OrderController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<List<OrderDTO>>> getAllOrders() {
-        List<OrderDTO> result = this.orderService.getOrders();
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> getAllOrders(@RequestParam(value = "stateId", required = false) Long stateId) {
+        List<OrderDTO> result = new ArrayList<>();
+
+        if(stateId != null) {
+            result = this.orderService.getOrdersByState(stateId);
+        }else {
+            result = this.orderService.getOrders();
+        }
+
         return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
 
