@@ -29,6 +29,12 @@ public class ValidationUtils {
         }
     }
 
+    public static void updateOrderState_TransactionValidation(Long stateIdFrom, Long stateIdTo) throws ValidationException{
+        if(!Utils.checkIfChangeStateOk(stateIdFrom, stateIdTo)){
+            throw new ValidationException("Transaction state from " + stateIdFrom + " - to " + stateIdTo + " not permitted");
+        }
+    }
+
     public static void getAllOrdersByState(Long stateId) throws ValidationException{
         if(OrderStateEnum.findById(stateId) == null){
             throw new ValidationException(UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG);

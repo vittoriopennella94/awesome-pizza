@@ -123,6 +123,7 @@ public class OrderService {
         return result;
     }
 
+    @Transactional
     public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO) {
         OrderDTO result = new OrderDTO();
 
@@ -171,13 +172,12 @@ public class OrderService {
         return result;
     }
 
+    @Transactional
     public OrderDTO updateOrderState(UpdateOrderDTO body) {
         OrderDTO result = new OrderDTO();
 
         try {
             ValidationUtils.updateStateBodyValidation(body);
-
-            OrderStateEnum nextState = OrderStateEnum.findById(body.getStateId());
 
             Order order = orderRepository.findOrderById(body.getOrderId());
 
@@ -185,14 +185,7 @@ public class OrderService {
                 throw new NotFoundException(UPDATE_STATE_BODY_ORDER_ID_NOT_FOUND_MSG + ": " + body.getOrderId());
             }
 
-            if (order.getOrderState() != null) {
-                OrderStateEnum orderState = OrderStateEnum.findById(order.getOrderState().getStateId());
-                if (orderState == nextState) {
-                    throw new ValidationException("Order state is already updated");
-                }
-            } else {
-                throw new ValidationException("Order State not found: " + body.getStateId());
-            }
+            ValidationUtils.updateOrderState_TransactionValidation(order.getOrderState().getStateId(), body.getStateId());
 
             OrderState orderState = new OrderState();
             orderState.setStateId(body.getStateId());

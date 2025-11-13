@@ -1,6 +1,7 @@
 package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.*;
+import it.adesso.awesomepizza.entity.OrderState;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
@@ -74,6 +75,27 @@ public class OrderServiceTest {
         OrderDTO orderDTO = this.orderService.saveOrder(insertOrderDTO);
 
         Assertions.assertNotNull(orderDTO);
+    }
+
+    @Test
+    public void updateOrderStateTest(){
+        OrderDTO result = this.orderService.getOrderById(3L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertNotNull(result.getOrderId());
+        Assertions.assertEquals(result.getOrderState(), OrderStateEnum.IN_ATTESA.getName());
+
+        UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(result.getOrderId());
+        updateOrderDTO.setStateId(OrderStateEnum.IN_PREPARAZIONE.getId());
+
+        this.orderService.updateOrderState(updateOrderDTO);
+
+        result = this.orderService.getOrderById(3L);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertNotNull(result.getOrderId());
+        Assertions.assertEquals(result.getOrderState(), OrderStateEnum.IN_PREPARAZIONE.getName());
     }
 
     private static InsertOrderDTO getInsertOrderDTO() {
