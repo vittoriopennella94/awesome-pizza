@@ -1,6 +1,7 @@
 package it.adesso.awesomepizza.utility;
 
 import it.adesso.awesomepizza.dto.UpdateOrderDTO;
+import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -87,4 +88,220 @@ public class ValidationUtilsTest {
             ValidationUtils.getAllOrdersByState(1L);
         });
     }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_ATTESA_to_IN_PREPARAZIONE_Ok() {
+        Assertions.assertDoesNotThrow(() -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_ATTESA.getId(), OrderStateEnum.IN_PREPARAZIONE.getId());
+        });
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_ATTESA_to_ANNULLATO_Ok(){
+        Assertions.assertDoesNotThrow(() -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_ATTESA.getId(), OrderStateEnum.ANNULLATO.getId());
+        });
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_ATTESA_to_IN_CONSEGNA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_ATTESA.getId(), OrderStateEnum.IN_CONSEGNA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_ATTESA.getId() + " - to " + OrderStateEnum.IN_CONSEGNA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_ATTESA_to_CONSEGNATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_ATTESA.getId(), OrderStateEnum.CONSEGNATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_ATTESA.getId() + " - to " + OrderStateEnum.CONSEGNATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_PREPARAZIONE_to_IN_CONSEGNA_Ok() {
+        Assertions.assertDoesNotThrow(() -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_PREPARAZIONE.getId(), OrderStateEnum.IN_CONSEGNA.getId());
+        });
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_PREPARAZIONE_to_ANNULLATO_Ok(){
+        Assertions.assertDoesNotThrow(() -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_PREPARAZIONE.getId(), OrderStateEnum.ANNULLATO.getId());
+        });
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_PREPARAZIONE_to_IN_ATTESA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_PREPARAZIONE.getId(), OrderStateEnum.IN_ATTESA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_PREPARAZIONE.getId() + " - to " + OrderStateEnum.IN_ATTESA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_PREPARAZIONE_to_CONSEGNATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_PREPARAZIONE.getId(), OrderStateEnum.CONSEGNATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_PREPARAZIONE.getId() + " - to " + OrderStateEnum.CONSEGNATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_CONSEGNA_to_CONSEGNATO_Ok(){
+        Assertions.assertDoesNotThrow(() -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_CONSEGNA.getId(), OrderStateEnum.CONSEGNATO.getId());
+        });
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_CONSEGNA_to_IN_PREPARAZIONE_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_CONSEGNA.getId(), OrderStateEnum.IN_PREPARAZIONE.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_CONSEGNA.getId() + " - to " + OrderStateEnum.IN_PREPARAZIONE.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_CONSEGNA_to_IN_ATTESA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_CONSEGNA.getId(), OrderStateEnum.IN_ATTESA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_CONSEGNA.getId() + " - to " + OrderStateEnum.IN_ATTESA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_CONSEGNA_to_ANNULLATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_CONSEGNA.getId(), OrderStateEnum.ANNULLATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_CONSEGNA.getId() + " - to " + OrderStateEnum.ANNULLATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_ANNULLATO_to_IN_ATTESA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.ANNULLATO.getId(), OrderStateEnum.IN_ATTESA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.IN_ATTESA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_ANNULLATO_to_IN_PREPARAZIONE_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.ANNULLATO.getId(), OrderStateEnum.IN_PREPARAZIONE.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.IN_PREPARAZIONE.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_ANNULLATO_to_IN_CONSEGNA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.ANNULLATO.getId(), OrderStateEnum.IN_CONSEGNA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.IN_CONSEGNA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_ANNULLATO_to_CONSEGNATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.ANNULLATO.getId(), OrderStateEnum.CONSEGNATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.CONSEGNATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_CONSEGNATO_to_IN_CONSEGNA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.CONSEGNATO.getId(), OrderStateEnum.IN_CONSEGNA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.CONSEGNATO.getId() + " - to " + OrderStateEnum.IN_CONSEGNA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_CONSEGNATO_to_IN_PREPARAZIONE_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.CONSEGNATO.getId(), OrderStateEnum.IN_PREPARAZIONE.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.CONSEGNATO.getId() + " - to " + OrderStateEnum.IN_PREPARAZIONE.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_CONSEGNATO_to_IN_ATTESA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.CONSEGNATO.getId(), OrderStateEnum.IN_ATTESA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.CONSEGNATO.getId() + " - to " + OrderStateEnum.IN_ATTESA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_CONSEGNATO_to_ANNULLATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.CONSEGNATO.getId(), OrderStateEnum.ANNULLATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.CONSEGNATO.getId() + " - to " + OrderStateEnum.ANNULLATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_ATTESA_to_IN_ATTESA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_ATTESA.getId(), OrderStateEnum.IN_ATTESA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_ATTESA.getId() + " - to " + OrderStateEnum.IN_ATTESA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_PREPARAZIONE_to_IN_PREPARAZIONE_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_PREPARAZIONE.getId(), OrderStateEnum.IN_PREPARAZIONE.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_PREPARAZIONE.getId() + " - to " + OrderStateEnum.IN_PREPARAZIONE.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_IN_CONSEGNA_to_IN_CONSEGNA_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.IN_CONSEGNA.getId(), OrderStateEnum.IN_CONSEGNA.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.IN_CONSEGNA.getId() + " - to " + OrderStateEnum.IN_CONSEGNA.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_CONSEGNATO_to_CONSEGNATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.CONSEGNATO.getId(), OrderStateEnum.CONSEGNATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.CONSEGNATO.getId() + " - to " + OrderStateEnum.CONSEGNATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void updateOrderState_TransactionValidation_From_ANNULLATO_to_ANNULLATO_Ko() throws ValidationException {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.updateOrderState_TransactionValidation(OrderStateEnum.ANNULLATO.getId(), OrderStateEnum.ANNULLATO.getId());
+        });
+
+        Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.ANNULLATO.getId() + " not permitted", validationException.getMessage());
+    }
+
 }

@@ -166,23 +166,6 @@ public class UtilsTest {
         Assertions.assertFalse(Utils.checkIfChangeStateOk(stateIdFrom, stateIdTo));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     public void checkIfChangeStateOkTest_From_IN_ATTESA_to_IN_ATTESA_Ko() {
         Long stateIdFrom = OrderStateEnum.IN_ATTESA.getId();
