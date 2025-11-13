@@ -1,7 +1,5 @@
 package it.adesso.awesomepizza.service;
 
-import it.adesso.awesomepizza.dto.OrderDTO;
-import it.adesso.awesomepizza.dto.OrderDetailsDTO;
 import it.adesso.awesomepizza.dto.ProductDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

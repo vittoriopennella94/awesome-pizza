@@ -1,6 +1,5 @@
 package it.adesso.awesomepizza.service;
 
-import it.adesso.awesomepizza.dto.OrderDetailsDTO;
 import it.adesso.awesomepizza.dto.ProductDTO;
 import it.adesso.awesomepizza.entity.Order;
 import it.adesso.awesomepizza.entity.Product;
