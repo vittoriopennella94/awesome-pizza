@@ -1,10 +1,7 @@
 package it.adesso.awesomepizza.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.adesso.awesomepizza.dto.InsertOrderDTO;
-import it.adesso.awesomepizza.dto.InsertOrderProductDTO;
-import it.adesso.awesomepizza.dto.OrderDTO;
-import it.adesso.awesomepizza.dto.OrderProductDTO;
+import it.adesso.awesomepizza.dto.*;
 import it.adesso.awesomepizza.entity.Order;
 import it.adesso.awesomepizza.entity.OrderProduct;
 import it.adesso.awesomepizza.entity.OrderState;
@@ -28,8 +25,7 @@ import java.util.List;
 import static it.adesso.awesomepizza.utility.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -306,8 +302,89 @@ public class OrderControllerTest {
     }
 
 
+    @Test
+    public void updateOrderStateTestOk() throws Exception {
+        UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(3L);
+        updateOrderDTO.setStateId(OrderStateEnum.IN_PREPARAZIONE.getId());
+
+        mockMvc.perform(put("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updateOrderDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.orderId").exists())
+                .andExpect(jsonPath("$.data.orderId").value(3L))
+                .andExpect(jsonPath("$.data.customerName").exists())
+                .andExpect(jsonPath("$.data.customerSurname").exists())
+                .andExpect(jsonPath("$.data.customerAddress").exists())
+                .andExpect(jsonPath("$.data.customerStreetNumber").exists());
 
 
+        mockMvc.perform(get("/api/orders/3")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.orderId").exists())
+                .andExpect(jsonPath("$.data.customerName").exists())
+                .andExpect(jsonPath("$.data.customerSurname").exists())
+                .andExpect(jsonPath("$.data.customerAddress").exists())
+                .andExpect(jsonPath("$.data.customerStreetNumber").exists())
+                .andExpect(jsonPath("$.data.customerAddInfo").exists())
+                .andExpect(jsonPath("$.data.orderState").exists())
+                .andExpect(jsonPath("$.data.orderState").value(OrderStateEnum.IN_PREPARAZIONE.getName()));
+    }
+
+    @Test
+    public void updateOrderStateTest_OrderId_Null() throws Exception {
+        UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(null);
+        updateOrderDTO.setStateId(OrderStateEnum.IN_PREPARAZIONE.getId());
+
+        mockMvc.perform(put("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updateOrderDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.message").exists())
+                .andExpect(jsonPath("$.data.message").value(UPDATE_STATE_BODY_ORDER_ID_NULL_MSG));
+    }
+
+    @Test
+    public void updateOrderStateTest_StateId_Null() throws Exception {
+        UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(3L);
+        updateOrderDTO.setStateId(null);
+
+        mockMvc.perform(put("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updateOrderDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.message").exists())
+                .andExpect(jsonPath("$.data.message").value(UPDATE_STATE_BODY_STATE_ID_NULL_MSG));
+    }
+
+    @Test
+    public void updateOrderStateTest_StateId_NotFound() throws Exception {
+        UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(3L);
+        updateOrderDTO.setStateId(6L);
+
+        mockMvc.perform(put("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updateOrderDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.message").exists())
+                .andExpect(jsonPath("$.data.message").value(UPDATE_STATE_BODY_STATE_ID_NOT_FOUND_MSG));
+    }
 
     private static InsertOrderDTO getInsertOrderDTO() {
         InsertOrderDTO insertOrderDTO = new InsertOrderDTO();

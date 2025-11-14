@@ -199,7 +199,7 @@ public class OrderService {
             LOGGER.warn("Validation KO: {}", e.getMessage());
             throw e;
         } catch (NotFoundException e) {
-            LOGGER.warn("Not found: {}", body.getOrderId());
+            LOGGER.warn("Not found: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error updating Order state", e);
