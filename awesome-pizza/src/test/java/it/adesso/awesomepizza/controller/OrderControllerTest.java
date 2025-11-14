@@ -245,6 +245,37 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.orderState").exists());
     }
 
+    @Test
+    public void updateOrderStateTest_CustomerName_Null_Or_Empty() throws Exception {
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName(null);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.message").exists())
+                .andExpect(jsonPath("$.data.message").value("CustomerName is required"));
+    }
+
+    @Test
+    public void updateOrderStateTest_CustomerSurname_Null_Or_Empty() throws Exception {
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("pippo");
+        body.setCustomerSurname(null);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").exists())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.message").exists())
+                .andExpect(jsonPath("$.data.message").value("CustomerSurname is required"));
+    }
+
 
     @Test
     public void updateOrderStateTestOk() throws Exception {

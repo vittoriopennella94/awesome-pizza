@@ -322,7 +322,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "CustomerName is required");
+        Assertions.assertEquals("CustomerName is required", validationException.getMessage());
     }
 
     @Test
@@ -339,7 +339,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "CustomerSurname is required");
+        Assertions.assertEquals("CustomerSurname is required", validationException.getMessage());
     }
 
     @Test
@@ -356,7 +356,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "CustomerAddress is required");
+        Assertions.assertEquals("CustomerAddress is required", validationException.getMessage());
     }
 
     @Test
@@ -373,7 +373,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "CustomerStreetNumber is required");
+        Assertions.assertEquals("CustomerStreetNumber is required", validationException.getMessage());
     }
 
     @Test
@@ -390,7 +390,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "Products is required");
+        Assertions.assertEquals("Products is required", validationException.getMessage());
     }
 
     @Test
@@ -410,7 +410,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "Product.ProductId is required");
+        Assertions.assertEquals("Product.ProductId is required", validationException.getMessage());
     }
 
     @Test
@@ -430,7 +430,7 @@ public class ValidationUtilsTest {
             ValidationUtils.insertOrderValidation(body);
         });
 
-        Assertions.assertEquals(validationException.getMessage(), "Product.Quantity is required");
+        Assertions.assertEquals("Product.Quantity is required", validationException.getMessage());
     }
 
 }

@@ -105,6 +105,30 @@ public class OrderServiceTest {
     }
 
     @Test
+    public void saveOrderTest_ValidationException_CustomerName_Null_Or_Empty() throws ValidationException{
+        InsertOrderDTO insertOrderDTO = getInsertOrderDTO();
+        insertOrderDTO.setCustomerName(null);
+
+        ValidationException validationException =  Assertions.assertThrows(ValidationException.class, () -> {
+            this.orderService.saveOrder(insertOrderDTO);
+        });
+
+        Assertions.assertEquals("CustomerName is required", validationException.getMessage());
+    }
+
+    @Test
+    public void saveOrderTest_ValidationException_CustomerSurname_Null_Or_Empty() throws ValidationException{
+        InsertOrderDTO insertOrderDTO = getInsertOrderDTO();
+        insertOrderDTO.setCustomerSurname(null);
+
+        ValidationException validationException =  Assertions.assertThrows(ValidationException.class, () -> {
+            this.orderService.saveOrder(insertOrderDTO);
+        });
+
+        Assertions.assertEquals("CustomerSurname is required", validationException.getMessage());
+    }
+
+    @Test
     public void updateOrderStateTest(){
         Order order = getOrder();
         UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
