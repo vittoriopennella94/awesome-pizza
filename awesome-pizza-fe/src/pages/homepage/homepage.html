@@ -1,18 +1,70 @@
+<!-- home.component.html -->
 <div class="home-container">
-  <div class="content">
-    <h1 class="title">Benvenuto</h1>
-    <p class="subtitle">Scegli un'opzione per iniziare</p>
+    <div class="content-wrapper">
 
-    <div class="button-group">
-      <button class="btn btn-primary" (click)="onClickOrdina()">
-        <span class="btn-icon">🚀</span>
-        Ordina
-      </button>
+        <!-- Card principale -->
+        <mat-card class="main-card">
 
-      <button class="btn btn-secondary" (click)="onClickListaOrdini()">
-        <span class="btn-icon">📚</span>
-        Lista Ordini
-      </button>
+            <!-- Header -->
+            <div class="header-section">
+                <div class="header-content">
+                    <mat-icon class="header-icon">shopping_cart</mat-icon>
+                    <div class="header-text">
+                        <h1>Gestione Ordini</h1>
+                        <p>Benvenuto nel sistema di gestione ordini. Scegli un'azione per iniziare.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenuto -->
+            <mat-card-content class="card-content">
+                <div class="actions-grid">
+
+                    <!-- Card Nuovo Ordine -->
+                    <mat-card class="action-card new-order-card" (click)="navigateToNewOrder()">
+                        <div class="card-background"></div>
+                        <div class="card-inner">
+                            <div class="icon-wrapper new-order-icon">
+                                <mat-icon>add</mat-icon>
+                            </div>
+
+                            <h2>Crea Nuovo Ordine</h2>
+
+                            <p class="card-description">
+                                Inserisci un nuovo ordine nel sistema. Compila tutti i dettagli necessari per la creazione.
+                            </p>
+
+                            <div class="card-action">
+                                <span>Inizia ora</span>
+                                <mat-icon>arrow_forward</mat-icon>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <!-- Card Lista Ordini -->
+                    <mat-card class="action-card list-order-card" (click)="navigateToOrderList()">
+                        <div class="card-background"></div>
+                        <div class="card-inner">
+                            <div class="icon-wrapper list-order-icon">
+                                <mat-icon>list</mat-icon>
+                            </div>
+
+                            <h2>Visualizza Ordini</h2>
+
+                            <p class="card-description">
+                                Consulta tutti gli ordini esistenti. Visualizza, modifica o elimina gli ordini registrati.
+                            </p>
+
+                            <div class="card-action">
+                                <span>Vai alla lista</span>
+                                <mat-icon>arrow_forward</mat-icon>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                </div>
+
+            </mat-card-content>
+        </mat-card>
     </div>
-  </div>
 </div>

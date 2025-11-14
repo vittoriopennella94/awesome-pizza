@@ -68,11 +68,11 @@ export class NuovoOrdine implements OnInit {
 
     initForm(): void {
         this.orderForm = this.fb.group({
-            customerName: ['', [Validators.required, Validators.minLength(2)]],
-            customerSurname: ['', [Validators.required, Validators.minLength(2)]],
-            customerAddress: ['', [Validators.required]],
-            customerStreetNumber: ['', [Validators.required]],
-            customerAddInfo: [''],
+            customerName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+            customerSurname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+            customerAddress: ['', [Validators.required, Validators.maxLength(150)]],
+            customerStreetNumber: ['', [Validators.required,  Validators.maxLength(10)]],
+            customerAddInfo: ['', [ Validators.maxLength(255)]],
             customerPhoneNumber: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
             products: this.fb.array([])
         });
