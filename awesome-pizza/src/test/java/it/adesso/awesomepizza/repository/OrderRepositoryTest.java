@@ -70,6 +70,7 @@ public class OrderRepositoryTest {
         order.setCustomerAddress("CUSTOMER_ADDRESS");
         order.setCustomerStreetNumber("CUSTOMER_STREET");
         order.setCustomerAddInfo("CUSTOMER_ADDINFO");
+        order.setCustomerPhoneNumber("1234567890");
 
         List<OrderProduct> orderProducts = new ArrayList<>();
 

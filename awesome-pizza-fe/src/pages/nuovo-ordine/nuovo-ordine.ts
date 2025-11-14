@@ -20,6 +20,7 @@ export interface OrderFormData {
     customerAddress: string;
     customerStreetNumber: string;
     customerAddInfo: string;
+    customerPhoneNumber: string;
     products: OrderProductForm[];
 }
 
@@ -72,6 +73,7 @@ export class NuovoOrdine implements OnInit {
             customerAddress: ['', [Validators.required]],
             customerStreetNumber: ['', [Validators.required]],
             customerAddInfo: [''],
+            customerPhoneNumber: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
             products: this.fb.array([])
         });
     }

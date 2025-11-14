@@ -377,6 +377,24 @@ public class ValidationUtilsTest {
     }
 
     @Test
+    public void insertOrderBodyValidationTest_CustomerPhoneNumber_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("aaa");
+        body.setCustomerPhoneNumber("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerPhoneNumber is required", validationException.getMessage());
+    }
+
+    @Test
     public void insertOrderBodyValidationTest_Products_Null_Or_Empty(){
         InsertOrderDTO body = new InsertOrderDTO();
         body.setCustomerName("Pippo");
@@ -384,6 +402,7 @@ public class ValidationUtilsTest {
         body.setCustomerAddress("Via");
         body.setCustomerStreetNumber("12");
         body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
         body.setProducts(new ArrayList<>());
 
         ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
@@ -401,6 +420,7 @@ public class ValidationUtilsTest {
         body.setCustomerAddress("Via");
         body.setCustomerStreetNumber("12");
         body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
         body.setProducts(new ArrayList<>());
         InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
         insertOrderProductDTO.setProductId(null);
@@ -421,6 +441,7 @@ public class ValidationUtilsTest {
         body.setCustomerAddress("Via");
         body.setCustomerStreetNumber("12");
         body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
         body.setProducts(new ArrayList<>());
         InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
         insertOrderProductDTO.setProductId(1L);

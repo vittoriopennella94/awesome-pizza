@@ -49,6 +49,7 @@ export class Order {
     customerAddress: string;
     customerStreetNumber: string;
     customerAddInfo: string;
+    customerPhoneNumber: string
     orderState: string;
 
     constructor() {
@@ -59,6 +60,7 @@ export class Order {
         this.customerStreetNumber = "";
         this.customerAddInfo = "";
         this.orderState = "";
+        this.customerPhoneNumber = "";
     }
 }
 

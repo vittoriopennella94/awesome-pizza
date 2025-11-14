@@ -79,6 +79,19 @@
                     </div>
 
                     <div class="form-row">
+                        <mat-form-field appearance="outline" class="form-field-small">
+                            <mat-label>Cellulare</mat-label>
+                            <input matInput formControlName="customerPhoneNumber" placeholder="XXXXXXXXXX">
+                            <mat-icon matPrefix>badge</mat-icon>
+                            @if (orderForm.get('customerPhoneNumber')?.invalid){
+                                <mat-error>
+                                    {{ getErrorMessage('customerPhoneNumber') }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-row">
                         <mat-form-field appearance="outline" class="form-field-full">
                             <mat-label>Informazioni Aggiuntive</mat-label>
                             <textarea matInput formControlName="customerAddInfo"

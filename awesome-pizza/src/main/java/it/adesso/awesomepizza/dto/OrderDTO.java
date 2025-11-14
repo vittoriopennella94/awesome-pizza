@@ -17,6 +17,7 @@ public class OrderDTO implements Serializable {
     private String customerAddress;
     private String customerStreetNumber;
     private String customerAddInfo;
+    private String customerPhoneNumber;
     private String orderState;
 
     public static OrderDTO fromEntity(Order order) {
@@ -31,6 +32,7 @@ public class OrderDTO implements Serializable {
         orderDTO.setCustomerAddress(order.getCustomerAddress());
         orderDTO.setCustomerStreetNumber(order.getCustomerStreetNumber());
         orderDTO.setCustomerAddInfo(order.getCustomerAddInfo());
+        orderDTO.setCustomerPhoneNumber(order.getCustomerPhoneNumber());
         orderDTO.setOrderState(order.getOrderState() != null ? order.getOrderState().getStateName() : "");
 
         return orderDTO;

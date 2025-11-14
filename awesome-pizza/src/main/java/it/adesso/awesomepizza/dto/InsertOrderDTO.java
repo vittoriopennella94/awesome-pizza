@@ -12,5 +12,6 @@ public class InsertOrderDTO implements Serializable {
     private String customerAddress;
     private String customerStreetNumber;
     private String customerAddInfo;
+    private String customerPhoneNumber;
     private List<InsertOrderProductDTO> products;
 }

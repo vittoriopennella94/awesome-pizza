@@ -207,6 +207,7 @@ public class OrderServiceTest {
         insertOrderDTO.setCustomerAddress("Address");
         insertOrderDTO.setCustomerStreetNumber("12/b");
         insertOrderDTO.setCustomerAddInfo("AddInfo");
+        insertOrderDTO.setCustomerPhoneNumber("1234567890");
 
         List<InsertOrderProductDTO> insertOrderProductDTOList = new ArrayList<>();
         InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
@@ -228,6 +229,7 @@ public class OrderServiceTest {
         order.setCustomerAddress("Address");
         order.setCustomerStreetNumber("12/b");
         order.setCustomerAddInfo("addInfo");
+        order.setCustomerPhoneNumber("1234567890");
 
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order);

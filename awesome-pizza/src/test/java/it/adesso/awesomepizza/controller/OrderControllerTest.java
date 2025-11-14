@@ -367,6 +367,7 @@ public class OrderControllerTest {
         insertOrderDTO.setCustomerSurname("Rossi");
         insertOrderDTO.setCustomerAddress("Via Roma");
         insertOrderDTO.setCustomerStreetNumber("10");
+        insertOrderDTO.setCustomerPhoneNumber("1234567890");
 
         List<InsertOrderProductDTO> insertOrderProductDTOList = new ArrayList<>();
         InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();

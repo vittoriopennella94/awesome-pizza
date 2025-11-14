@@ -99,6 +99,7 @@
             <column name="customer_address" value="Via Roma"/>
             <column name="customer_street_number" value="15"/>
             <column name="customer_add_info" value="Secondo piano, citofono Rossi"/>
+            <column name="customer_phone_number" value="3332298349"/>
             <column name="order_state" valueNumeric="4"/>
         </insert>
         <insert tableName="tbl_order">
@@ -107,6 +108,7 @@
             <column name="customer_address" value="Corso Vittorio Emanuele"/>
             <column name="customer_street_number" value="42"/>
             <column name="customer_add_info" value=""/>
+            <column name="customer_phone_number" value="2222298349"/>
             <column name="order_state" valueNumeric="2"/>
         </insert>
         <insert tableName="tbl_order">
@@ -115,6 +117,7 @@
             <column name="customer_address" value="Piazza Garibaldi"/>
             <column name="customer_street_number" value="8"/>
             <column name="customer_add_info" value="Portone verde"/>
+            <column name="customer_phone_number" value="1112298349"/>
             <column name="order_state" valueNumeric="1"/>
         </insert>
 

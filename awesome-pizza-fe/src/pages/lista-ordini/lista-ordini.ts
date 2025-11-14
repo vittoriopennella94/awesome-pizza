@@ -28,6 +28,7 @@ export interface OrderData {
     customerSurname: string;
     customerAddress: string;
     customerAddInfo: string;
+    customerPhoneNumber: string;
     orderState: string;
 }
 
@@ -68,6 +69,10 @@ export class ListaOrdini implements OnInit {
             name: 'Add. Info',
         },
         {
+            id: 'customerPhoneNumber',
+            name: 'Phone Number',
+        },
+        {
             id: 'orderState',
             name: 'State',
         }
@@ -104,6 +109,7 @@ export class ListaOrdini implements OnInit {
                         customerSurname: order.customerSurname,
                         customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
                         customerAddInfo: order.customerAddInfo,
+                        customerPhoneNumber: order.customerPhoneNumber,
                         orderState: order.orderState
                     });
                 }));
@@ -138,10 +144,10 @@ export class ListaOrdini implements OnInit {
         this.orderDetails = null;
         this.expandedElement = this.isExpanded(element) ? null : element;
 
-        if(this.expandedElement) {
+        if (this.expandedElement) {
             this.orderService.getOrderDetails(element.orderId).subscribe(res => {
                 console.log(res);
-                if(res && res.success && res.data){
+                if (res && res.success && res.data) {
                     this.orderDetails = res.data;
                 }
             })
@@ -188,19 +194,19 @@ export class ListaOrdini implements OnInit {
         }
     }
 
-    onChangeFilterState(stateId: number){
+    onChangeFilterState(stateId: number) {
         console.log("STATO SELEZIONATO: " + stateId);
 
         this.selectedState = stateId;
-        if(stateId === 0){
+        if (stateId === 0) {
             this.orderService.getAllOrders().subscribe(res => {
-                if(res && res.data){
+                if (res && res.data) {
                     this.orderToDataSource(res.data);
                 }
             });
-        }else {
+        } else {
             this.orderService.getAllOrders(stateId).subscribe(res => {
-                if(res && res.data){
+                if (res && res.data) {
                     this.orderToDataSource(res.data);
                 }
             });
@@ -216,7 +222,7 @@ export class ListaOrdini implements OnInit {
         }
         this.orderService.updateOrder(body).subscribe(res => {
             console.log(res);
-            if(res && res.data) {
+            if (res && res.data) {
                 this.onChangeFilterState(this.selectedState);
             }
         })
@@ -233,6 +239,7 @@ export class ListaOrdini implements OnInit {
                 customerSurname: order.customerSurname,
                 customerAddress: order.customerAddress + ', ' + order.customerStreetNumber,
                 customerAddInfo: order.customerAddInfo,
+                customerPhoneNumber: order.customerPhoneNumber,
                 orderState: order.orderState
             })
         }))

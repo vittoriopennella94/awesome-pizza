@@ -141,6 +141,7 @@ public class OrderService {
             order.setCustomerAddress(body.getCustomerAddress());
             order.setCustomerStreetNumber(body.getCustomerStreetNumber());
             order.setCustomerAddInfo(body.getCustomerAddInfo());
+            order.setCustomerPhoneNumber(body.getCustomerPhoneNumber());
 
 
             List<OrderProduct> orderProducts = new ArrayList<>();

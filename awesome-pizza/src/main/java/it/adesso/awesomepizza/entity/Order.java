@@ -37,6 +37,9 @@ public class Order {
     @Column(name = "customer_add_info")
     private String customerAddInfo;
 
+    @Column(name = "customer_phone_number", nullable = false)
+    private String customerPhoneNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_state", nullable = false, foreignKey = @ForeignKey(name = "fk_order_state_id"))
     private OrderState orderState;

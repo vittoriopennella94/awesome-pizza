@@ -90,6 +90,14 @@ public class ValidationUtils {
             }
         }
 
+        if(body.getCustomerPhoneNumber() == null || body.getCustomerPhoneNumber().trim().isEmpty()){
+            throw new ValidationException(formatMessage(INSERT_ORDER_BODY_REQUIRED_MSG, "CustomerPhoneNumber"));
+        }else {
+            if(body.getCustomerPhoneNumber().trim().length() > 10){
+                throw new ValidationException(formatMessage(INSERT_ORDER_BODY_MAX_LENGTH_MSG, "CustomerPhoneNumber", "10"));
+            }
+        }
+
         if(body.getProducts() == null || body.getProducts().isEmpty()){
             throw new ValidationException(formatMessage(INSERT_ORDER_BODY_REQUIRED_MSG, "Products"));
         }else {
