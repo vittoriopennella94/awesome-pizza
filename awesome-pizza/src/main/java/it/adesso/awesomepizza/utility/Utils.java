@@ -2,6 +2,8 @@ package it.adesso.awesomepizza.utility;
 
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 
+import java.text.MessageFormat;
+
 public class Utils {
     public static boolean checkIfChangeStateOk(Long stateIdFrom, Long stateIdTo) {
         boolean result = false;
@@ -19,5 +21,9 @@ public class Utils {
         }
 
         return  result;
+    }
+
+    public static String formatMessage(String message, Object ... args) {
+        return String.format(message, args);
     }
 }

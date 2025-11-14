@@ -206,5 +206,11 @@ public class UtilsTest {
         Assertions.assertFalse(Utils.checkIfChangeStateOk(stateIdFrom, stateIdTo));
     }
 
+    @Test
+    public void formatMessageTest(){
+        String msg = "Ciao %s, hai %s minuti?";
+        String formatted = Utils.formatMessage(msg, "Pippo", "5");
 
+        Assertions.assertEquals(formatted, "Ciao Pippo, hai 5 minuti?");
+    }
 }

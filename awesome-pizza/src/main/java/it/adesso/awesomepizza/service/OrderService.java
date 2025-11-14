@@ -124,46 +124,52 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDTO saveOrder(InsertOrderDTO insertOrderDTO) {
+    public OrderDTO saveOrder(InsertOrderDTO body) {
         OrderDTO result = new OrderDTO();
 
         try {
-            if (insertOrderDTO != null && insertOrderDTO.getProducts() != null && !insertOrderDTO.getProducts().isEmpty()) {
-                Order order = new Order();
-                OrderState orderState = new OrderState();
+            ValidationUtils.insertOrderValidation(body);
 
-                orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
-                order.setOrderState(orderState);
+            Order order = new Order();
+            OrderState orderState = new OrderState();
 
-                order.setCustomerName(insertOrderDTO.getCustomerName());
-                order.setCustomerSurname(insertOrderDTO.getCustomerSurname());
-                order.setCustomerAddress(insertOrderDTO.getCustomerAddress());
-                order.setCustomerStreetNumber(insertOrderDTO.getCustomerStreetNumber());
-                order.setCustomerAddInfo(insertOrderDTO.getCustomerAddInfo());
+            orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
+            order.setOrderState(orderState);
+
+            order.setCustomerName(body.getCustomerName());
+            order.setCustomerSurname(body.getCustomerSurname());
+            order.setCustomerAddress(body.getCustomerAddress());
+            order.setCustomerStreetNumber(body.getCustomerStreetNumber());
+            order.setCustomerAddInfo(body.getCustomerAddInfo());
 
 
-                List<OrderProduct> orderProducts = new ArrayList<>();
+            List<OrderProduct> orderProducts = new ArrayList<>();
 
-                for (InsertOrderProductDTO p : insertOrderDTO.getProducts()) {
-                    OrderProduct orderProduct = new OrderProduct();
-                    orderProduct.setOrder(order);
+            for (InsertOrderProductDTO p : body.getProducts()) {
+                OrderProduct orderProduct = new OrderProduct();
+                orderProduct.setOrder(order);
 
-                    Product product = new Product();
-                    product.setProductId(p.getProductId());
-                    orderProduct.setProduct(product);
+                Product product = new Product();
+                product.setProductId(p.getProductId());
+                orderProduct.setProduct(product);
 
-                    orderProduct.setQuantity(p.getQuantity());
-                    orderProduct.setNote(p.getNote());
+                orderProduct.setQuantity(p.getQuantity());
+                orderProduct.setNote(p.getNote());
 
-                    orderProducts.add(orderProduct);
-                }
-
-                order.setOrderProducts(orderProducts);
-
-                Order savedOrder = this.orderRepository.save(order);
-
-                result = OrderDTO.fromEntity(savedOrder);
+                orderProducts.add(orderProduct);
             }
+
+            order.setOrderProducts(orderProducts);
+
+            Order savedOrder = this.orderRepository.save(order);
+
+            result = OrderDTO.fromEntity(savedOrder);
+        } catch (ValidationException e) {
+            LOGGER.warn("Error body saving order: {}", body, e);
+            throw e;
+        } catch (NotFoundException e) {
+            LOGGER.warn("Error not found saving order: {}", body, e);
+            throw e;
         } catch (Exception e) {
             LOGGER.error("Error saving Order", e);
             throw new RuntimeException("Error saving Order", e);

@@ -1,11 +1,15 @@
 package it.adesso.awesomepizza.utility;
 
+import it.adesso.awesomepizza.dto.InsertOrderDTO;
+import it.adesso.awesomepizza.dto.InsertOrderProductDTO;
 import it.adesso.awesomepizza.dto.UpdateOrderDTO;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
 
 import static it.adesso.awesomepizza.utility.Constants.*;
 
@@ -302,6 +306,131 @@ public class ValidationUtilsTest {
         });
 
         Assertions.assertEquals("Transaction state from " + OrderStateEnum.ANNULLATO.getId() + " - to " + OrderStateEnum.ANNULLATO.getId() + " not permitted", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerName_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("");
+        body.setCustomerSurname("");
+        body.setCustomerAddress("");
+        body.setCustomerStreetNumber("");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "CustomerName is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerSurname_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("");
+        body.setCustomerAddress("");
+        body.setCustomerStreetNumber("");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "CustomerSurname is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerAddress_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("");
+        body.setCustomerStreetNumber("");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "CustomerAddress is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerStreetNumber_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "CustomerStreetNumber is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_Products_Null_Or_Empty(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "Products is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_Products_ProductId_Null(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(null);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "Product.ProductId is required");
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_Products_Quantity_Null(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals(validationException.getMessage(), "Product.Quantity is required");
     }
 
 }
