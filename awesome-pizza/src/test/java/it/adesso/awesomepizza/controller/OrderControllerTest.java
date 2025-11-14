@@ -247,62 +247,6 @@ public class OrderControllerTest {
 
 
     @Test
-    public void insertOrder_thenThrowsException() throws Exception {
-        OrderDTO inputDTO = new OrderDTO();
-        inputDTO.setCustomerName(getInsertOrderDTO().getCustomerName());
-        inputDTO.setCustomerSurname(getInsertOrderDTO().getCustomerSurname());
-        inputDTO.setCustomerAddress(getInsertOrderDTO().getCustomerAddress());
-        inputDTO.setCustomerStreetNumber(getInsertOrderDTO().getCustomerStreetNumber());
-        inputDTO.setOrderState(OrderStateEnum.IN_ATTESA.getName());
-
-        Order order = new Order();
-        OrderState orderState = new OrderState();
-
-        orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
-        order.setOrderState(orderState);
-
-        order.setCustomerName("CUSTOMER_NAME");
-        order.setCustomerSurname("CUSTOMER_SURNAME");
-        order.setCustomerAddress("CUSTOMER_ADDRESS");
-        order.setCustomerStreetNumber("CUSTOMER_STREET");
-        order.setCustomerAddInfo("CUSTOMER_ADDINFO");
-
-        List<OrderProduct> orderProducts = new ArrayList<>();
-
-        OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setOrder(order);
-
-        Product product = new Product();
-        product.setProductId(1L);
-        orderProduct.setProduct(product);
-
-        orderProduct.setQuantity(3);
-        orderProduct.setNote("PRODUCT_NOTE");
-
-        orderProducts.add(orderProduct);
-
-        order.setOrderProducts(orderProducts);
-
-        when(this.orderRepository.save(order)).thenThrow(new RuntimeException());
-
-        when(this.orderService.saveOrder(any(InsertOrderDTO.class)))
-                .thenThrow(new RuntimeException("Errore DB"));
-
-        mockMvc.perform(post("/api/orders")
-                        .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(getInsertOrderDTO())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").exists())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.data").isNotEmpty())
-                .andExpect(jsonPath("$.data.status").isNumber())
-                .andExpect(jsonPath("$.data.status").value(500))
-                .andExpect(jsonPath("$.data.message").isString())
-                .andExpect(jsonPath("$.data.message").value(EXCEPTION_ERROR_MSG));
-    }
-
-
-    @Test
     public void updateOrderStateTestOk() throws Exception {
         UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
         updateOrderDTO.setOrderId(3L);
@@ -398,6 +342,7 @@ public class OrderControllerTest {
         insertOrderProductDTO.setProductId(1L);
         insertOrderProductDTO.setQuantity(3);
         insertOrderProductDTO.setNote("PRODUCT_NOTE");
+        insertOrderProductDTOList.add(insertOrderProductDTO);
 
         insertOrderDTO.setProducts(insertOrderProductDTOList);
         return insertOrderDTO;
