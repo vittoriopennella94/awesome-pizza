@@ -11,11 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_order_state")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class OrderState {
 
     @Id

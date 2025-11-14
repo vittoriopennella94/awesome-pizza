@@ -12,11 +12,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_product")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class Product {
 
     @Id

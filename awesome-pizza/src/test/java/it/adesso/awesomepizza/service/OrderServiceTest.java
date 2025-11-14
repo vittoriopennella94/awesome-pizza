@@ -1,6 +1,10 @@
 package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.*;
+import it.adesso.awesomepizza.entity.Order;
+import it.adesso.awesomepizza.entity.OrderProduct;
+import it.adesso.awesomepizza.entity.OrderState;
+import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
 import it.adesso.awesomepizza.exception.ValidationException;
@@ -9,15 +13,20 @@ import it.adesso.awesomepizza.repository.OrderStateRepository;
 import it.adesso.awesomepizza.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static it.adesso.awesomepizza.utility.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class OrderServiceTest {
@@ -29,10 +38,11 @@ public class OrderServiceTest {
     private OrderRepository orderRepository;
 
     @MockitoSpyBean
-    private OrderStateRepository orderStateRepository;
+    private ProductRepository productRepository;
 
     @MockitoSpyBean
-    private ProductRepository productRepository;
+    private OrderStateRepository orderStateRepository;
+
 
     @Test
     public void findAllOrdersTest(){
@@ -83,23 +93,35 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void saveOrderTest() {
+    public void saveOrderTest(){
+        Order order = getOrder();
+        InsertOrderDTO insertOrderDTO = getInsertOrderDTO();
 
+        when(this.orderRepository.save(order)).thenReturn(order);
+        OrderDTO orderDTO = this.orderService.saveOrder(insertOrderDTO);
+
+        Assertions.assertNotNull(orderDTO);
+        Assertions.assertEquals("Name", orderDTO.getCustomerName());
     }
 
     @Test
     public void updateOrderStateTest(){
+        Order order = getOrder();
         UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
-        updateOrderDTO.setOrderId(3L);
-        updateOrderDTO.setStateId(3L);
+        updateOrderDTO.setOrderId(10L);
+        updateOrderDTO.setStateId(2L);
+
+        when(this.orderRepository.save(order)).thenReturn(order);
+
+        updateOrderDTO.setOrderId(order.getOrderId());
 
         this.orderService.updateOrderState(updateOrderDTO);
 
-        OrderDTO orderUpd = this.orderService.getOrderById(3L);
+        OrderDTO orderDTO = this.orderService.getOrderById(order.getOrderId());
 
-        assertNotNull(orderUpd);
-        assertNotNull(orderUpd.getOrderId());
-        assertEquals(orderUpd.getOrderState(), OrderStateEnum.IN_CONSEGNA.getName());
+        assertNotNull(orderDTO);
+        assertNotNull(orderDTO.getOrderId());
+        assertEquals(orderDTO.getOrderState(), OrderStateEnum.IN_PREPARAZIONE.getName());
     }
 
     @Test
@@ -156,19 +178,50 @@ public class OrderServiceTest {
 
     private static InsertOrderDTO getInsertOrderDTO() {
         InsertOrderDTO insertOrderDTO = new InsertOrderDTO();
-        insertOrderDTO.setCustomerName("CUSTOMER_NAME");
-        insertOrderDTO.setCustomerSurname("CUSTOMER_SURNAME");
-        insertOrderDTO.setCustomerAddress("CUSTOMER_ADDRESS");
-        insertOrderDTO.setCustomerStreetNumber("CUSTOMER_STREET_NUMBER");
-        insertOrderDTO.setCustomerAddInfo("CUSTOMER_ADDINFO");
+        insertOrderDTO.setCustomerName("Name");
+        insertOrderDTO.setCustomerSurname("Surname");
+        insertOrderDTO.setCustomerAddress("Address");
+        insertOrderDTO.setCustomerStreetNumber("12/b");
+        insertOrderDTO.setCustomerAddInfo("AddInfo");
 
         List<InsertOrderProductDTO> insertOrderProductDTOList = new ArrayList<>();
         InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
         insertOrderProductDTO.setProductId(1L);
         insertOrderProductDTO.setQuantity(3);
-        insertOrderProductDTO.setNote("PRODUCT_NOTE");
+        insertOrderProductDTO.setProductName("productName");
+
+        insertOrderProductDTOList.add(insertOrderProductDTO);
 
         insertOrderDTO.setProducts(insertOrderProductDTOList);
         return insertOrderDTO;
+    }
+
+    public static Order getOrder(){
+        Order order = new Order();
+       // order.setOrderId(10L);
+        order.setCustomerName("Name");
+        order.setCustomerSurname("Surname");
+        order.setCustomerAddress("Address");
+        order.setCustomerStreetNumber("12/b");
+        order.setCustomerAddInfo("addInfo");
+
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setOrder(order);
+
+        Product product = new Product();
+        product.setProductId(1L);
+        product.setProductName("productName");
+        product.setProductEnable("Y");
+        product.setProductDescription("productDescription");
+        product.setProductPrice(new BigDecimal("12.00"));
+
+        orderProduct.setProduct(product);
+
+        OrderState orderState = new OrderState();
+        orderState.setStateId(OrderStateEnum.IN_ATTESA.getId());
+        orderState.setStateName(OrderStateEnum.IN_ATTESA.getName());
+
+        order.setOrderState(orderState);
+        return order;
     }
 }

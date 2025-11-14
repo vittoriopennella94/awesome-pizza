@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_order_product")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class OrderProduct {
 
     @Id
