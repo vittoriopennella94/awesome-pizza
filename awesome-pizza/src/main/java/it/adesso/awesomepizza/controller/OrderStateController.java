@@ -1,5 +1,6 @@
 package it.adesso.awesomepizza.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.adesso.awesomepizza.dto.ApiResponse;
 import it.adesso.awesomepizza.dto.OrderStateDTO;
@@ -24,6 +25,7 @@ public class OrderStateController {
     @Autowired
     private OrderStateService orderStateService;
 
+    @Operation(summary = "Retrieve all order states")
     @GetMapping
     public ResponseEntity<ApiResponse<List<OrderStateDTO>>> getStates() {
         List<OrderStateDTO> orderStates = this.orderStateService.getStates();

@@ -1,5 +1,6 @@
 package it.adesso.awesomepizza.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.adesso.awesomepizza.dto.ApiResponse;
 import it.adesso.awesomepizza.dto.OrderStateDTO;
@@ -25,12 +26,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Operation(summary = "Retrieve all products")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProductDTO>>> getProducts() {
         List<ProductDTO> result = this.productService.getProducts();
         return ResponseEntity.ok(ApiResponse.successNoMessage(result));
     }
 
+    @Operation(summary = "Retrieve product by id")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductDTO>> getProductById(@PathVariable Long id) {
         ProductDTO result = this.productService.getProductDetailsById(id);
