@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
         return ResponseEntity.ok(ApiResponse.error(errorResponse, VALIDATION_EXCEPTION_ERROR_MSG));
     }
+
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleServiceException(ServiceException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
+        return ResponseEntity.ok(ApiResponse.error(errorResponse, SERVICE_EXCEPTION_ERROR_MSG));
+    }
 }

@@ -7,6 +7,7 @@ import it.adesso.awesomepizza.entity.OrderState;
 import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
+import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import it.adesso.awesomepizza.utility.ValidationUtils;
@@ -53,7 +54,7 @@ public class OrderService {
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
-            throw new RuntimeException("Error retrieving order", e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -73,7 +74,7 @@ public class OrderService {
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
-            throw new RuntimeException("Error retrieving order", e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -93,7 +94,7 @@ public class OrderService {
 
         } catch (Exception e) {
             LOGGER.error("Error getting Orders", e);
-            throw new RuntimeException("Error retrieving orders", e);
+            throw new ServiceException(e.getMessage());
         }
 
         return result;
@@ -117,7 +118,7 @@ public class OrderService {
 
         } catch (Exception e) {
             LOGGER.error("Error getting Orders", e);
-            throw new RuntimeException("Error retrieving orders", e);
+            throw new ServiceException(e.getMessage());
         }
 
         return result;
@@ -173,7 +174,7 @@ public class OrderService {
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error saving Order", e);
-            throw new RuntimeException("Error saving Order", e);
+            throw new ServiceException(e.getMessage());
         }
 
         return result;
@@ -210,7 +211,7 @@ public class OrderService {
             throw e;
         } catch (Exception e) {
             LOGGER.error("Error updating Order state", e);
-            throw new RuntimeException("Error updating Order state", e);
+            throw new ServiceException(e.getMessage());
         }
 
         return result;

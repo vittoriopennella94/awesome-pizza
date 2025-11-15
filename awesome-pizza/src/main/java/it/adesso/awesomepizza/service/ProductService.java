@@ -4,6 +4,7 @@ import it.adesso.awesomepizza.dto.ProductDTO;
 import it.adesso.awesomepizza.entity.Order;
 import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.exception.NotFoundException;
+import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class ProductService {
 
         }catch(Exception e){
             LOGGER.error("Error getting Products", e);
-            throw  new RuntimeException("Error getting Products", e);
+            throw new ServiceException(e.getMessage());
         }
 
         return result;
@@ -61,7 +62,7 @@ public class ProductService {
             throw e;
         } catch(Exception e) {
             LOGGER.error("Error getting Product By ProductId: {}", productId, e);
-            throw new RuntimeException("Error retrieving product", e);
+            throw new ServiceException(e.getMessage());
         }
     }
 

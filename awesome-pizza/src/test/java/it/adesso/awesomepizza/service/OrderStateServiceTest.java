@@ -2,18 +2,26 @@ package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.OrderDTO;
 import it.adesso.awesomepizza.dto.OrderStateDTO;
+import it.adesso.awesomepizza.exception.ServiceException;
+import it.adesso.awesomepizza.repository.OrderStateRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.List;
+
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class OrderStateServiceTest {
 
-    @Autowired
+    @MockitoSpyBean
     private OrderStateService orderStateService;
+
+    @MockitoSpyBean
+    private OrderStateRepository orderStateRepository;
 
     @Test
     public void findAllStates(){
@@ -22,4 +30,15 @@ public class OrderStateServiceTest {
         Assertions.assertNotNull(states);
         Assertions.assertFalse(states.isEmpty());
     }
+
+    @Test
+    public void findAllStates_Exception(){
+        when(this.orderStateRepository.findAll()).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(ServiceException.class, () -> {
+            this.orderStateService.getStates();
+        });
+    }
+
+
 }

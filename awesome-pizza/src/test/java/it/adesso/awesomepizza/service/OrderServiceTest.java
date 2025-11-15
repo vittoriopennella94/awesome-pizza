@@ -7,6 +7,7 @@ import it.adesso.awesomepizza.entity.OrderState;
 import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
+import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import it.adesso.awesomepizza.repository.OrderStateRepository;
@@ -198,6 +199,42 @@ public class OrderServiceTest {
         });
 
         assertEquals(UPDATE_STATE_BODY_ORDER_ID_NOT_FOUND_MSG + ": " + updateOrderDTO.getOrderId(), notFoundException.getMessage());
+    }
+
+    @Test
+    public void findOrderById_Exception(){
+        when(this.orderRepository.findOrderById(1L)).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(ServiceException.class, () -> {
+            this.orderService.getOrderById(1L);
+        });
+    }
+
+    @Test
+    public void findOrderDetailsById_Exception(){
+        when(this.orderRepository.findOrderDetailsById(1L)).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(ServiceException.class, () -> {
+            this.orderService.getOrderProductDetailsById(1L);
+        });
+    }
+
+    @Test
+    public void getAllOrdersByState_Exception(){
+        when(this.orderRepository.getAllOrdersByState(1L)).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(ServiceException.class, () -> {
+            this.orderService.getOrdersByState(1L);
+        });
+    }
+
+    @Test
+    public void getAllOrders_Exception(){
+        when(this.orderRepository.getAllOrders()).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(ServiceException.class, () -> {
+            this.orderService.getOrders();
+        });
     }
 
     private static InsertOrderDTO getInsertOrderDTO() {
