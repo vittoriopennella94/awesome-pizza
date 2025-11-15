@@ -42,7 +42,12 @@ public class OrderProductDTOTest {
         Assertions.assertNotNull(orderProductDTO);
         Assertions.assertEquals(orderProductDTO.getOrderId(), orderProduct.getOrder().getOrderId());
         Assertions.assertEquals(orderProductDTO.getProductId(), orderProduct.getProduct().getProductId());
+    }
 
+    @Test
+    public void fromEntityTest_Null(){
+        OrderProductDTO orderProductDTO = OrderProductDTO.fromEntity(null);
 
+        Assertions.assertNull(orderProductDTO);
     }
 }

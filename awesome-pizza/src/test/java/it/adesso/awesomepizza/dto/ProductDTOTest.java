@@ -43,4 +43,11 @@ public class ProductDTOTest {
         Assertions.assertEquals(product.getProductId(), productDTO.getProductId());
         Assertions.assertEquals(product.getProductName(), productDTO.getProductName());
     }
+
+    @Test
+    public void fromEntityTest_Null(){
+        ProductDTO productDTO = ProductDTO.fromEntity(null);
+
+        Assertions.assertNull(productDTO);
+    }
 }

@@ -43,4 +43,11 @@ public class OrderStateDTOTest {
         Assertions.assertEquals(orderStateDTO.getStateId(), orderState.getStateId());
         Assertions.assertEquals(orderStateDTO.getStateName(), orderState.getStateName());
     }
+
+    @Test
+    public void fromEntityTest_Null(){
+        OrderStateDTO orderStateDTO = OrderStateDTO.fromEntity(null);
+
+        Assertions.assertNull(orderStateDTO);
+    }
 }
