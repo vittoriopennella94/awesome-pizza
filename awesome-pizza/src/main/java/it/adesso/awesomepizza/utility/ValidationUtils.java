@@ -110,7 +110,7 @@ public class ValidationUtils {
                     throw new ValidationException(formatMessage(INSERT_ORDER_BODY_REQUIRED_MSG, "Product.Quantity"));
                 }
 
-                if(body.getProducts().get(i).getNote() != null && body.getProducts().get(i).getNote().trim().isEmpty()){
+                if(body.getProducts().get(i).getNote() != null && !body.getProducts().get(i).getNote().trim().isEmpty()){
                     if(body.getProducts().get(i).getNote().length() > 255){
                         throw new ValidationException(formatMessage(INSERT_ORDER_BODY_MAX_LENGTH_MSG, "Product.note", "255"));
                     }

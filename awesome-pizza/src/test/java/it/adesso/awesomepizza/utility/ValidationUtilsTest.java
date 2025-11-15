@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static it.adesso.awesomepizza.utility.Constants.*;
 
@@ -454,4 +455,156 @@ public class ValidationUtilsTest {
         Assertions.assertEquals("Product.Quantity is required", validationException.getMessage());
     }
 
+    @Test
+    public void insertOrderBodyValidationTest_Body_Null(){
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(null);
+        });
+
+        Assertions.assertEquals(INSERT_ORDER_BODY_NULL_MSG, validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerName_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName(generateRandomString(51));
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerName exceeds the maximum allowed length of 50 characters", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerSurname_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname(generateRandomString(51));
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerSurname exceeds the maximum allowed length of 50 characters", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerAddress_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress(generateRandomString(151));
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerAddress exceeds the maximum allowed length of 150 characters", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerAddInfo_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo(generateRandomString(256));
+        body.setCustomerPhoneNumber("1234567890");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerAddInfo exceeds the maximum allowed length of 255 characters", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_CustomerPhoneNumber_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber(generateRandomString(11));
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("CustomerPhoneNumber exceeds the maximum allowed length of 10 characters", validationException.getMessage());
+    }
+
+    @Test
+    public void insertOrderBodyValidationTest_Products_ProductNote_MaxLength(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber(generateRandomString(10));
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        insertOrderProductDTO.setQuantity(2);
+        insertOrderProductDTO.setNote(generateRandomString(256));
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("Product.note exceeds the maximum allowed length of 255 characters", validationException.getMessage());
+    }
+
+
+
+
+
+
+
+    public static String generateRandomString(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+
+        return random.ints(length, 0, characters.length())
+                .mapToObj(characters::charAt)
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+    }
 }
