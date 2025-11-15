@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * REST Controller for order management
+ * @author vittorio
+ */
 @CrossOrigin()
 @RestController
 @RequestMapping("/api/orders")

@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST Controller to retrieve order products
+ *
+ * @author vittorio
+ */
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
