@@ -1,5 +1,6 @@
 package it.adesso.awesomepizza.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.adesso.awesomepizza.dto.*;
 import it.adesso.awesomepizza.service.OrderService;
 import it.adesso.awesomepizza.service.OrderStateService;
@@ -17,6 +18,7 @@ import java.util.List;
 @CrossOrigin()
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "OrderController", description = "Order management endpoints")
 public class OrderController {
 
     @Autowired

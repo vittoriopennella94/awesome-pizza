@@ -1,5 +1,6 @@
 package it.adesso.awesomepizza.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.adesso.awesomepizza.dto.ApiResponse;
 import it.adesso.awesomepizza.dto.OrderStateDTO;
 import it.adesso.awesomepizza.dto.ProductDTO;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "ProductController", description = "Retrieve order products endpoints")
 public class ProductController {
 
     @Autowired
