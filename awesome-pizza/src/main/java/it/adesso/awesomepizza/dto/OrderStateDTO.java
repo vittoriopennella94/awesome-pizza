@@ -1,20 +1,19 @@
 package it.adesso.awesomepizza.dto;
 
-import it.adesso.awesomepizza.entity.Order;
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.adesso.awesomepizza.entity.OrderState;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+@Schema(description = "Data transfer object for Order State entity")
 @Data
 public class OrderStateDTO implements Serializable {
+    @Schema(description = "State ID")
     private Long stateId;
+
+    @Schema(description = "State name")
     private String stateName;
 
     public static OrderStateDTO fromEntity(OrderState orderState) {

@@ -1,16 +1,27 @@
 package it.adesso.awesomepizza.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.adesso.awesomepizza.entity.OrderProduct;
 import lombok.Data;
 
 import java.io.Serializable;
 
+@Schema(description = "Data transfer object for Order Product entity")
 @Data
 public class OrderProductDTO implements Serializable {
+    @Schema(description = "Order ID")
     private Long orderId;
+
+    @Schema(description = "Product ID")
     private Long productId;
+
+    @Schema(description = "Product name")
     private String productName;
+
+    @Schema(description = "Quantity")
     private Integer quantity;
+
+    @Schema(description = "Note")
     private String note;
 
 

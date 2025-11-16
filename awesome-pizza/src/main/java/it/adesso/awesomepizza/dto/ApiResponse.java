@@ -1,13 +1,20 @@
 package it.adesso.awesomepizza.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Schema(description = "Custom response for all APIs")
 public class ApiResponse<T>  {
+    @Schema(description = "Result of the request")
     private boolean success;
+
+    @Schema(description = "Message")
     private String message;
+
+    @Schema(description = "Response data")
     private T data;
 
     public ApiResponse(boolean success, String message, T data) {

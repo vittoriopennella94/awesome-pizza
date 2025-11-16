@@ -1,20 +1,28 @@
 package it.adesso.awesomepizza.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.adesso.awesomepizza.entity.Product;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+@Schema(description = "Data transfer object for Product entity")
 @Data
 public class ProductDTO implements Serializable {
+    @Schema(description = "Product ID")
     private Long productId;
+
+    @Schema(description = "Product name")
     private String productName;
+
+    @Schema(description = "Product description")
     private String productDescription;
+
+    @Schema(description = "Product price")
     private BigDecimal productPrice;
+
+    @Schema(description = "Product enable")
     private String productEnable;
 
     public static ProductDTO fromEntity(Product product) {
