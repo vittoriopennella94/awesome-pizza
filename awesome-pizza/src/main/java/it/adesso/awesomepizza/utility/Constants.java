@@ -21,4 +21,5 @@ public class Constants {
     public static final String INSERT_ORDER_BODY_REQUIRED_MSG = "%s is required";
     public static final String INSERT_ORDER_BODY_MAX_LENGTH_MSG = "%s exceeds the maximum allowed length of %s characters";
 
+    public static final String FIND_OBJECT_NULL_MSG = "%s is null";
 }

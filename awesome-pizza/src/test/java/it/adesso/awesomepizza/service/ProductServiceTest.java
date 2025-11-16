@@ -2,6 +2,7 @@ package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.ProductDTO;
 import it.adesso.awesomepizza.exception.ServiceException;
+import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,13 @@ public class ProductServiceTest {
         when(this.productRepository.findByProductId(1L)).thenThrow(new RuntimeException());
         Assertions.assertThrows(ServiceException.class, () -> {
             this.productService.getProductDetailsById(1L);
+        });
+    }
+
+    @Test
+    public void findProductById_ValidationException(){
+        Assertions.assertThrows(ValidationException.class, () -> {
+            this.productService.getProductDetailsById(null);
         });
     }
 }

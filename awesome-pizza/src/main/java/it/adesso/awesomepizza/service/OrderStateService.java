@@ -14,6 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service for retrieve order states
+ * @author vittorio
+ * @see OrderState
+ * @see OrderStateDTO
+ * @see OrderStateRepository
+ *
+ */
 @Service
 public class OrderStateService {
     private static final Logger logger = LoggerFactory.getLogger(OrderStateService.class);
@@ -21,6 +29,10 @@ public class OrderStateService {
     @Autowired
     private OrderStateRepository orderStateRepository;
 
+    /**
+     * Retrieves all order stats
+     * @return a list of all order states in the system
+     */
     @Transactional(readOnly = true)
     public List<OrderStateDTO> getStates(){
         List<OrderStateDTO> result = new ArrayList<>();

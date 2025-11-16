@@ -593,6 +593,14 @@ public class ValidationUtilsTest {
     }
 
 
+    @Test
+    public void getProductDetailsByIdTest_ProductId_Null(){
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.findProductByIdValidation(null);
+        });
+
+        Assertions.assertEquals("productId is null", validationException.getMessage());
+    }
 
 
 

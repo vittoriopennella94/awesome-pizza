@@ -118,4 +118,10 @@ public class ValidationUtils {
             }
         }
     }
+
+    public static void findProductByIdValidation(Long productId) throws ValidationException{
+        if(productId == null){
+            throw new ValidationException(formatMessage(FIND_OBJECT_NULL_MSG, "productId"));
+        }
+    }
 }

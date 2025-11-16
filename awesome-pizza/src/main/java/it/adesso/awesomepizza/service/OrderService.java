@@ -10,6 +10,7 @@ import it.adesso.awesomepizza.exception.NotFoundException;
 import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
+import it.adesso.awesomepizza.repository.OrderStateRepository;
 import it.adesso.awesomepizza.utility.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static it.adesso.awesomepizza.utility.Constants.UPDATE_STATE_BODY_ORDER_ID_NOT_FOUND_MSG;
 
+
+/**
+ * Service for order business logic management
+ * @author vittorio
+ * @see Order
+ * @see OrderState
+ * @see OrderProduct
+ * @see OrderDTO
+ * @see OrderStateDTO
+ * @see OrderProductDTO
+ * @see OrderRepository
+ *
+ */
 @Service
 public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
