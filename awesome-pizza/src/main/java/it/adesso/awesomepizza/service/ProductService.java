@@ -36,7 +36,9 @@ public class ProductService {
 
     /**
      * Retrieves all products from the database
+     *
      * @return a list of all products in the system
+     * @throws ServiceException for generic exception
      */
     @Transactional(readOnly = true)
     public List<ProductDTO> getProducts() {

@@ -46,6 +46,7 @@ public class OrderService {
 
     /**
      * Retrieves a list of products for specific order by its unique identifier
+     *
      * @param orderId the unique identifier of the order to retrieve
      * @return a list o product for order with the specified ID
      * @throws NotFoundException if no order exists with the given ID or products
@@ -87,6 +88,7 @@ public class OrderService {
 
     /**
      * Retrieves a specific order by its unique identifier
+     *
      * @param orderId the unique identifier of the order to retrieve
      * @return the order with the specified ID
      * @throws NotFoundException if no order exists with the given ID
@@ -122,6 +124,7 @@ public class OrderService {
 
     /**
      * Retrieves all orders from the database
+     *
      * @return a list of all orders in the system
      * @throws ServiceException for generic exception
      */
@@ -177,6 +180,29 @@ public class OrderService {
         return result;
     }
 
+
+    /**
+     * Saves a new order in the system.
+     *
+     * <p>This method performs the following operations:</p>
+     * <ol>
+     *   <li>Validates the input order data</li>
+     *   <li>Creates a new Order entity with PENDING status</li>
+     *   <li>Maps customer information from DTO to entity</li>
+     *   <li>Creates OrderProduct entities for each product in the order</li>
+     *   <li>Persists the order and its products to the database</li>
+     *   <li>Converts the saved entity back to DTO</li>
+     * </ol>
+     *
+     * <p>The entire operation is executed within a transaction to ensure
+     * data consistency. If any error occurs, the transaction will be rolled back.</p>
+     *
+     * @param body the order data to save, including customer information and products
+     * @return the saved order as DTO with generated ID and timestamps
+     * @throws ValidationException if the order data fails validation rules
+     * @throws NotFoundException if any referenced product is not found
+     * @throws ServiceException if an unexpected error occurs during the save operation
+     */
     @Transactional
     public OrderDTO saveOrder(InsertOrderDTO body) {
         OrderDTO result = new OrderDTO();
@@ -233,6 +259,32 @@ public class OrderService {
         return result;
     }
 
+
+    /**
+     * Updates the state of an existing order.
+     *
+     * <p>This method performs the following operations:</p>
+     * <ol>
+     *   <li>Validates the input data</li>
+     *   <li>Retrieves the order by ID</li>
+     *   <li>Validates the state transition according to business rules</li>
+     *   <li>Updates the order state</li>
+     *   <li>Persists the changes to the database</li>
+     *   <li>Returns the updated order as DTO</li>
+     * </ol>
+     *
+     * <p>State transitions are validated to ensure they follow the allowed workflow
+     * (e.g., IN_ATTESA -> IN_PREPARAZIONE -> IN_CONSEGNA -> CONSEGNATO). Invalid transitions will be rejected.</p>
+     *
+     * <p>The entire operation is executed within a transaction to ensure
+     * data consistency. If any error occurs, the transaction will be rolled back.</p>
+     *
+     * @param body the update request containing order ID and new state ID
+     * @return the updated order as DTO with the new state
+     * @throws ValidationException if the request data is invalid or the state transition is not allowed
+     * @throws NotFoundException if the order with the specified ID does not exist
+     * @throws ServiceException if an unexpected error occurs during the update operation
+     */
     @Transactional
     public OrderDTO updateOrderState(UpdateOrderDTO body) {
         OrderDTO result = new OrderDTO();

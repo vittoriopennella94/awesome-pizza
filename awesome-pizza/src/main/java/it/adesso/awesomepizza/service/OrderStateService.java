@@ -31,7 +31,9 @@ public class OrderStateService {
 
     /**
      * Retrieves all order stats
+     *
      * @return a list of all order states in the system
+     * @throws ServiceException for generic exception
      */
     @Transactional(readOnly = true)
     public List<OrderStateDTO> getStates(){
