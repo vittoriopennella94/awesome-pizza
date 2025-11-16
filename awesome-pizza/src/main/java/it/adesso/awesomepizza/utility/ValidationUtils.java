@@ -124,4 +124,18 @@ public class ValidationUtils {
             throw new ValidationException(formatMessage(FIND_OBJECT_NULL_MSG, "productId"));
         }
     }
+
+    public static void getOrderProductDetailsByIdValidation(Long orderId) throws ValidationException{
+        if(orderId == null){
+            throw new ValidationException(formatMessage(FIND_OBJECT_NULL_MSG, "orderId"));
+        }
+    }
+
+    public static void getOrderByIdValidation(Long orderId) throws ValidationException{
+        if(orderId == null){
+            throw new ValidationException(formatMessage(FIND_OBJECT_NULL_MSG, "orderId"));
+        }
+    }
+
+
 }

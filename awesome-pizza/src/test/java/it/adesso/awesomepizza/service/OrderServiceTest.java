@@ -287,4 +287,18 @@ public class OrderServiceTest {
         order.setOrderState(orderState);
         return order;
     }
+
+    @Test
+    public void getOrderProductDetailsByIdValidationException(){
+        Assertions.assertThrows(ValidationException.class, () -> {
+            this.orderService.getOrderProductDetailsById(null);
+        });
+    }
+
+    @Test
+    public void getOrderByIdValidationException(){
+        Assertions.assertThrows(ValidationException.class, () -> {
+            this.orderService.getOrderById(null);
+        });
+    }
 }

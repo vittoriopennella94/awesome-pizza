@@ -44,11 +44,21 @@ public class OrderService {
     private OrderRepository orderRepository;
 
 
+    /**
+     * Retrieves a list of products for specific order by its unique identifier
+     * @param orderId the unique identifier of the order to retrieve
+     * @return a list o product for order with the specified ID
+     * @throws NotFoundException if no order exists with the given ID or products
+     * @throws ValidationException if the ID is null
+     * @throws ServiceException for generic exception
+     */
     @Transactional(readOnly = true)
     public List<OrderProductDTO> getOrderProductDetailsById(Long orderId) {
         List<OrderProductDTO> result = new ArrayList<>();
 
         try {
+            ValidationUtils.getOrderProductDetailsByIdValidation(orderId);
+
             Order order = orderRepository.findOrderDetailsById(orderId);
 
             if (order == null || order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) {
@@ -65,15 +75,30 @@ public class OrderService {
         } catch (NotFoundException e) {
             LOGGER.warn("Order not found: {}", orderId);
             throw e;
+        } catch(ValidationException e) {
+            LOGGER.warn("Validation exception: {}", orderId);
+            throw e;
         } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
             throw new ServiceException(e.getMessage());
         }
     }
 
+
+    /**
+     * Retrieves a specific order by its unique identifier
+     * @param orderId the unique identifier of the order to retrieve
+     * @return the order with the specified ID
+     * @throws NotFoundException if no order exists with the given ID
+     * @throws ValidationException if the ID is null
+     * @throws ServiceException for generic exception
+     */
     @Transactional(readOnly = true)
     public OrderDTO getOrderById(Long orderId) {
+
         try {
+            ValidationUtils.getOrderByIdValidation(orderId);
+
             Order order = orderRepository.findOrderById(orderId);
 
             if (order == null) {
@@ -85,12 +110,21 @@ public class OrderService {
         } catch (NotFoundException e) {
             LOGGER.warn("Order not found: {}", orderId);
             throw e;
+        } catch(ValidationException e) {
+            LOGGER.warn("Validation exception: {}", orderId);
+            throw e;
         } catch (Exception e) {
             LOGGER.error("Error getting Order By OrderId: {}", orderId, e);
             throw new ServiceException(e.getMessage());
         }
     }
 
+
+    /**
+     * Retrieves all orders from the database
+     * @return a list of all orders in the system
+     * @throws ServiceException for generic exception
+     */
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrders() {
         List<OrderDTO> result = new ArrayList<>();
@@ -113,6 +147,12 @@ public class OrderService {
         return result;
     }
 
+
+    /**
+     * Retrieves all orders by state ID from the database
+     * @return a list of all products with the specified state ID in the system
+     * @throws ServiceException for generic exception
+     */
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByState(Long stateId) {
         List<OrderDTO> result = new ArrayList<>();

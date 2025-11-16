@@ -602,6 +602,24 @@ public class ValidationUtilsTest {
         Assertions.assertEquals("productId is null", validationException.getMessage());
     }
 
+    @Test
+    public void getOrderProductDetailsByIdTest_OrderId_Null(){
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.getOrderProductDetailsByIdValidation(null);
+        });
+
+        Assertions.assertEquals("orderId is null", validationException.getMessage());
+    }
+
+    @Test
+    public void getOrderByIdValidationTest_OrderId_Null(){
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.getOrderByIdValidation(null);
+        });
+
+        Assertions.assertEquals("orderId is null", validationException.getMessage());
+    }
+
 
 
 
