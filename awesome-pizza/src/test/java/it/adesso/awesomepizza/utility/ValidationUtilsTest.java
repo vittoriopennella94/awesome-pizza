@@ -456,6 +456,28 @@ public class ValidationUtilsTest {
     }
 
     @Test
+    public void insertOrderBodyValidationTest_Products_Quantity_equals_Zero(){
+        InsertOrderDTO body = new InsertOrderDTO();
+        body.setCustomerName("Pippo");
+        body.setCustomerSurname("Pippo");
+        body.setCustomerAddress("Via");
+        body.setCustomerStreetNumber("12");
+        body.setCustomerAddInfo("");
+        body.setCustomerPhoneNumber("1234567890");
+        body.setProducts(new ArrayList<>());
+        InsertOrderProductDTO insertOrderProductDTO = new InsertOrderProductDTO();
+        insertOrderProductDTO.setProductId(1L);
+        insertOrderProductDTO.setQuantity(0);
+        body.getProducts().add(insertOrderProductDTO);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            ValidationUtils.insertOrderValidation(body);
+        });
+
+        Assertions.assertEquals("Product.Quantity is required", validationException.getMessage());
+    }
+
+    @Test
     public void insertOrderBodyValidationTest_Body_Null(){
         ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
             ValidationUtils.insertOrderValidation(null);

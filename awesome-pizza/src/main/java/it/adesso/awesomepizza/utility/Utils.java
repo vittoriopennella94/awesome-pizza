@@ -7,6 +7,8 @@ import java.util.IllegalFormatException;
 
 /**
  * Utility class
+ *
+ * @author vittorio
  */
 public class Utils {
 
