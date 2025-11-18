@@ -2,6 +2,8 @@ package it.adesso.awesomepizza.exception;
 
 import it.adesso.awesomepizza.dto.ApiResponse;
 import it.adesso.awesomepizza.dto.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +26,8 @@ import static it.adesso.awesomepizza.utility.Constants.*;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 
     /**
      * Handles all unexpected exceptions that are not explicitly caught.
@@ -33,6 +37,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleException(Exception exception) {
+        LOGGER.warn(exception.getMessage(), exception);
         ErrorResponse errorResponse = new ErrorResponse(EXCEPTION_ERROR_MSG, HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
     }
@@ -46,6 +51,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleNotFoundException(NotFoundException exception) {
+        LOGGER.warn(exception.getMessage(), exception);
         ErrorResponse errorResponse = new ErrorResponse(NOT_FOUND_EXCEPTION_ERROR_MSG, HttpStatus.OK.value());
         return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
     }
@@ -59,20 +65,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(ValidationException exception) {
+        LOGGER.warn(exception.getMessage(), exception);
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
         return ResponseEntity.ok(ApiResponse.error(errorResponse, VALIDATION_EXCEPTION_ERROR_MSG));
-    }
-
-
-    /**
-     * Handles service layer exceptions.
-     *
-     * @param exception the ServiceException that was thrown, containing service error details
-     * @return a ResponseEntity containing a service error response with the specific error message
-     */
-    @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ApiResponse<ErrorResponse>> handleServiceException(ServiceException exception) {
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
-        return ResponseEntity.ok(ApiResponse.error(errorResponse, SERVICE_EXCEPTION_ERROR_MSG));
     }
 }

@@ -7,16 +7,13 @@ import it.adesso.awesomepizza.entity.OrderState;
 import it.adesso.awesomepizza.entity.Product;
 import it.adesso.awesomepizza.enums.OrderStateEnum;
 import it.adesso.awesomepizza.exception.NotFoundException;
-import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.OrderRepository;
 import it.adesso.awesomepizza.repository.OrderStateRepository;
 import it.adesso.awesomepizza.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.math.BigDecimal;
@@ -26,7 +23,6 @@ import java.util.List;
 import static it.adesso.awesomepizza.utility.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -205,7 +201,7 @@ public class OrderServiceTest {
     public void findOrderById_Exception(){
         when(this.orderRepository.findOrderById(1L)).thenThrow(new RuntimeException());
 
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.orderService.getOrderById(1L);
         });
     }
@@ -214,7 +210,7 @@ public class OrderServiceTest {
     public void findOrderDetailsById_Exception(){
         when(this.orderRepository.findOrderDetailsById(1L)).thenThrow(new RuntimeException());
 
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.orderService.getOrderProductDetailsById(1L);
         });
     }
@@ -223,7 +219,7 @@ public class OrderServiceTest {
     public void getAllOrdersByState_Exception(){
         when(this.orderRepository.getAllOrdersByState(1L)).thenThrow(new RuntimeException());
 
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.orderService.getOrdersByState(1L);
         });
     }
@@ -232,7 +228,7 @@ public class OrderServiceTest {
     public void getAllOrders_Exception(){
         when(this.orderRepository.getAllOrders()).thenThrow(new RuntimeException());
 
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.orderService.getOrders();
         });
     }
