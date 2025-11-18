@@ -231,6 +231,10 @@ public class OrderService {
     public OrderDTO updateOrderState(UpdateOrderDTO body) {
         OrderDTO result = new OrderDTO();
 
+        if(this.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId()) >= 1) {
+            throw new ValidationException("It is not possible to prepare more than one order.");
+        }
+
         ValidationUtils.updateStateBodyValidation(body);
 
         Order order = orderRepository.findOrderById(body.getOrderId());
@@ -250,5 +254,10 @@ public class OrderService {
         result = OrderDTO.fromEntity(order);
 
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public Long countOrderByState(Long stateId) {
+        return this.orderRepository.countOrdersByState(stateId);
     }
 }

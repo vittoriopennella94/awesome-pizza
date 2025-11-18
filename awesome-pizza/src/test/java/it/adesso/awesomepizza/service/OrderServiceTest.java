@@ -136,6 +136,8 @@ public class OrderServiceTest {
 
         updateOrderDTO.setOrderId(order.getOrderId());
 
+        when(this.orderService.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
+
         this.orderService.updateOrderState(updateOrderDTO);
 
         OrderDTO orderDTO = this.orderService.getOrderById(order.getOrderId());
@@ -151,6 +153,8 @@ public class OrderServiceTest {
         updateOrderDTO.setOrderId(3L);
         updateOrderDTO.setStateId(null);
 
+        when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
+
         ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
             this.orderService.updateOrderState(updateOrderDTO);
         });
@@ -163,6 +167,9 @@ public class OrderServiceTest {
         UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
         updateOrderDTO.setOrderId(null);
         updateOrderDTO.setStateId(3L);
+
+        when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
+
 
         ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
             this.orderService.updateOrderState(updateOrderDTO);
@@ -177,6 +184,8 @@ public class OrderServiceTest {
         updateOrderDTO.setOrderId(3L);
         updateOrderDTO.setStateId(7L);
 
+        when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
+
         ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
             this.orderService.updateOrderState(updateOrderDTO);
         });
@@ -189,6 +198,9 @@ public class OrderServiceTest {
         UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
         updateOrderDTO.setOrderId(10L);
         updateOrderDTO.setStateId(3L);
+
+        when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
+        when(this.orderService.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(0L);
 
         NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> {
             this.orderService.updateOrderState(updateOrderDTO);
@@ -296,5 +308,22 @@ public class OrderServiceTest {
         Assertions.assertThrows(ValidationException.class, () -> {
             this.orderService.getOrderById(null);
         });
+    }
+
+    @Test
+    public void updateOrderStateTestKo_Multiple_IN_PREPARAZIONE() throws NotFoundException {
+        UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
+        updateOrderDTO.setOrderId(10L);
+        updateOrderDTO.setStateId(3L);
+
+        when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(1L);
+
+        when(this.orderService.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(1L);
+
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, () -> {
+            this.orderService.updateOrderState(updateOrderDTO);
+        });
+
+        assertEquals("It is not possible to prepare more than one order.", validationException.getMessage());
     }
 }

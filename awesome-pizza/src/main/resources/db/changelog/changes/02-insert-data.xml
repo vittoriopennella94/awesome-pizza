@@ -109,7 +109,7 @@
             <column name="customer_street_number" value="42"/>
             <column name="customer_add_info" value=""/>
             <column name="customer_phone_number" value="2222298349"/>
-            <column name="order_state" valueNumeric="2"/>
+            <column name="order_state" valueNumeric="3"/>
         </insert>
         <insert tableName="tbl_order">
             <column name="customer_name" value="Giuseppe"/>

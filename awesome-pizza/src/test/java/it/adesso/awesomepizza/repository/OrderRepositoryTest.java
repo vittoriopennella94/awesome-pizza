@@ -121,4 +121,11 @@ public class OrderRepositoryTest {
         Assertions.assertNotNull(order.getOrderState());
         Assertions.assertEquals(OrderStateEnum.ANNULLATO.getId(), order.getOrderState().getStateId());
     }
+
+    @Test
+    public void countOrderByStateTest(){
+        Long counter = this.orderRepository.countOrdersByState(OrderStateEnum.IN_CONSEGNA.getId());
+
+        Assertions.assertEquals(1, counter);
+    }
 }
