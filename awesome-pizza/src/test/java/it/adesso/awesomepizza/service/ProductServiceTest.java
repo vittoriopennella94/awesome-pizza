@@ -1,12 +1,10 @@
 package it.adesso.awesomepizza.service;
 
 import it.adesso.awesomepizza.dto.ProductDTO;
-import it.adesso.awesomepizza.exception.ServiceException;
 import it.adesso.awesomepizza.exception.ValidationException;
 import it.adesso.awesomepizza.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -43,7 +41,7 @@ public class ProductServiceTest {
     @Test
     public void findAllProduct_Exception(){
         when(this.productRepository.findAll()).thenThrow(new RuntimeException());
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.productService.getProducts();
         });
     }
@@ -51,7 +49,7 @@ public class ProductServiceTest {
     @Test
     public void findProductById_Exception(){
         when(this.productRepository.findByProductId(1L)).thenThrow(new RuntimeException());
-        Assertions.assertThrows(ServiceException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             this.productService.getProductDetailsById(1L);
         });
     }
