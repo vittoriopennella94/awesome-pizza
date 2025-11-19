@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorResponse>> handleException(Exception exception) {
         LOGGER.warn(exception.getMessage(), exception);
         ErrorResponse errorResponse = new ErrorResponse(EXCEPTION_ERROR_MSG, HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
+        return new ResponseEntity<>(ApiResponse.errorNoMessage(errorResponse), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -52,8 +52,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleNotFoundException(NotFoundException exception) {
         LOGGER.warn(exception.getMessage(), exception);
-        ErrorResponse errorResponse = new ErrorResponse(NOT_FOUND_EXCEPTION_ERROR_MSG, HttpStatus.OK.value());
-        return ResponseEntity.ok(ApiResponse.errorNoMessage(errorResponse));
+        ErrorResponse errorResponse = new ErrorResponse(NOT_FOUND_EXCEPTION_ERROR_MSG, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(ApiResponse.errorNoMessage(errorResponse), HttpStatus.NOT_FOUND);
     }
 
 
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(ValidationException exception) {
         LOGGER.warn(exception.getMessage(), exception);
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.OK.value());
-        return ResponseEntity.ok(ApiResponse.error(errorResponse, VALIDATION_EXCEPTION_ERROR_MSG));
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(ApiResponse.error(errorResponse, VALIDATION_EXCEPTION_ERROR_MSG), HttpStatus.BAD_REQUEST);
     }
 }

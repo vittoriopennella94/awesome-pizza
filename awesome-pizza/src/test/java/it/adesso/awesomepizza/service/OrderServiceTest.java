@@ -313,8 +313,8 @@ public class OrderServiceTest {
     @Test
     public void updateOrderStateTestKo_Multiple_IN_PREPARAZIONE() throws NotFoundException {
         UpdateOrderDTO updateOrderDTO =  new UpdateOrderDTO();
-        updateOrderDTO.setOrderId(10L);
-        updateOrderDTO.setStateId(3L);
+        updateOrderDTO.setOrderId(2L);
+        updateOrderDTO.setStateId(2L);
 
         when(this.orderRepository.countOrdersByState(OrderStateEnum.IN_PREPARAZIONE.getId())).thenReturn(1L);
 

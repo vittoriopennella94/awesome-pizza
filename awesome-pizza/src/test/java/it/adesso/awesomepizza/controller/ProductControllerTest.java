@@ -51,7 +51,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/api/products")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.success").exists())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.data").exists())
@@ -84,7 +84,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.success").exists())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.data").exists())
@@ -99,13 +99,13 @@ public class ProductControllerTest {
     public void getOrderById_notFound() throws Exception {
         mockMvc.perform(get("/api/products/50")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success").exists())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.data").isNotEmpty())
                 .andExpect(jsonPath("$.data.status").isNumber())
-                .andExpect(jsonPath("$.data.status").value(200))
+                .andExpect(jsonPath("$.data.status").value(404))
                 .andExpect(jsonPath("$.data.message").isString())
                 .andExpect(jsonPath("$.data.message").value(NOT_FOUND_EXCEPTION_ERROR_MSG));
     }

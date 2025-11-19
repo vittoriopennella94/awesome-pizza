@@ -80,7 +80,7 @@
 
                             <mat-menu #menu="matMenu">
                                 @if (element.orderState === 'IN ATTESA') {
-                                    <button mat-menu-item (click)="onTakeCharge(element)">
+                                    <button [disabled]="this.counterInPreparation >= 1" mat-menu-item (click)="onTakeCharge(element)">
                                         <mat-icon>play_arrow</mat-icon>
                                         <span>Prendi in carico</span>
                                     </button>

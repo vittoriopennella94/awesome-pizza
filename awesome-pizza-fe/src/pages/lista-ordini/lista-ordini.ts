@@ -85,6 +85,7 @@ export class ListaOrdini implements OnInit {
     private orderStates: OrderState[] = [];
     private orders: Order[] = [];
     private selectedState = 0;
+    protected counterInPreparation: number = 0;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private router: Router,
@@ -94,6 +95,7 @@ export class ListaOrdini implements OnInit {
 
     ngOnInit() {
         this.selectedState = 0;
+        this.counterInPreparation = 0;
 
         this.activatedRoute.data.subscribe(({data}) => {
             console.log(data);
@@ -102,6 +104,11 @@ export class ListaOrdini implements OnInit {
 
             if (this.orders && this.orders.length > 0) {
                 this.orders.forEach(((order, index) => {
+
+                    if(order.orderState.toUpperCase() === "IN PREPARAZIONE"){
+                        this.counterInPreparation+=1;
+                    }
+
                     this.dataSource.push({
                         orderId: order.orderId,
                         orderNumber: index + 1,
@@ -230,8 +237,14 @@ export class ListaOrdini implements OnInit {
 
     private orderToDataSource(orders: Order[]) {
         this.orders = orders;
+        this.counterInPreparation = 0;
         this.dataSource = [];
         this.orders.forEach(((order, index) => {
+
+            if(order.orderState.toUpperCase() === "IN PREPARAZIONE"){
+                this.counterInPreparation+=1;
+            }
+
             this.dataSource.push({
                 orderId: order.orderId,
                 orderNumber: index + 1,

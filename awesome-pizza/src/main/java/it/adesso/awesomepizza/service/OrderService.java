@@ -231,11 +231,11 @@ public class OrderService {
     public OrderDTO updateOrderState(UpdateOrderDTO body) {
         OrderDTO result = new OrderDTO();
 
-        if(this.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId()) >= 1) {
+        ValidationUtils.updateStateBodyValidation(body);
+
+        if(this.countOrderByState(OrderStateEnum.IN_PREPARAZIONE.getId()) >= 1 && body.getStateId().equals(OrderStateEnum.IN_PREPARAZIONE.getId())) {
             throw new ValidationException("It is not possible to prepare more than one order.");
         }
-
-        ValidationUtils.updateStateBodyValidation(body);
 
         Order order = orderRepository.findOrderById(body.getOrderId());
 

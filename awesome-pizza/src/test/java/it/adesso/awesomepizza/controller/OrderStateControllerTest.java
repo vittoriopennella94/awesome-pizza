@@ -46,7 +46,7 @@ public class OrderStateControllerTest {
 
         mockMvc.perform(get("/api/states")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.success").exists())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.data").exists())
